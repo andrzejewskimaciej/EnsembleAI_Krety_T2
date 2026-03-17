@@ -13,3 +13,8 @@ The challenge is entirely in **context engineering** - the models are fixed, so 
 - **Metric:** ChrF - measures character-level n-gram similarity between generated and reference completions
 - **Final score:** Average ChrF across all three models and all completion points
 - **Evaluation pipeline:** format validation → context injection → model completion → ChrF vs. ground truth
+
+Task2
+[Repo with baseline kit](https://github.com/JetBrains-Research/EnsembleAI2026-starter-kit)
+
+[New public dataset](https://drive.google.com/drive/folders/1U5WGXTqbED9vnkk2lDWJA4ETaxrut2we)
