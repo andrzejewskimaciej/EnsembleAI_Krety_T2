@@ -1,0 +1,10 @@
+    cat >>/etc/sysconfig/readahead <<EOF
+
+# readahead conflicts with auditd, see bug 561486 for detailed explanation.
+#
+# Should a task need to change these settings, it must revert to this state
+# when test is done.
+
+READAHEAD_COLLECT="no"
+READAHEAD_COLLECT_ON_RPM="no"
+EOF

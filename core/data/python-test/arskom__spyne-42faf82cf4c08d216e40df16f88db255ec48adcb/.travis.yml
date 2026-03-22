@@ -1,0 +1,23 @@
+language: python
+python:
+  - "2.6"
+  - "2.7"
+  - "3.3"
+  - "3.4"
+  - "pypy"
+before_script:
+  - psql -c "create database spyne_test_$USER;" -U postgres
+before_install:
+  - sudo apt-get install -qq libzmq3-dev
+install:
+  - pip install tox
+script:
+  # Python 2 section
+  - if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then tox -e py26,py26-dj1.4.x,py26-dj1.5.x,py26-dj1.6.x; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then tox -e py27,py27-dj1.4.x,py27-dj1.5.x,py27-dj1.6.x,py27-dj1.7.x; fi
+  # disable pypy -- travis' pypy deployment seems broken
+  # - if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then tox -e pypy; fi
+
+  # Python 3 section
+  - if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then tox -e py33-travis,py33-dj1.7.x; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then tox -e py34-travis,py34-dj1.7.x; fi

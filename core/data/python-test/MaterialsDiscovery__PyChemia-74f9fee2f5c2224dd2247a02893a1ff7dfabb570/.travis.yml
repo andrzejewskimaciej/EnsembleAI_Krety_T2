@@ -1,0 +1,45 @@
+language: python
+python:
+  - 2.7
+  - 3.5
+  - 3.6
+notifications:
+  email: false
+
+services:
+  - mongodb
+
+before_install:
+  - if [ "${TRAVIS_PYTHON_VERSION}" = "2.7" ]; then 
+    wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh; 
+    else 
+    wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh; 
+    fi
+  - chmod +x miniconda.sh && ./miniconda.sh -b
+  - if [ "${TRAVIS_PYTHON_VERSION}" = "2.7" ]; then 
+    export PATH=$HOME/miniconda2/bin:$PATH; ls $HOME/miniconda2/bin;
+    else
+    export PATH=$HOME/miniconda3/bin:$PATH; ls $HOME/miniconda3/bin;
+    fi
+  - echo $PATH
+  - pwd
+  - conda update --yes conda
+  # The next couple lines fix a crash with multiprocessing on Travis and are not specific to using Miniconda
+  - sudo rm -rf /dev/shm
+  - sudo ln -s /run/shm /dev/shm
+  # sudo apt-get -qq update
+  # sudo apt-get install -y gcc gfortran m4 autoconf automake libtool
+
+install:
+  - conda install --yes python=$TRAVIS_PYTHON_VERSION atlas numpy scipy nose coverage future
+  - pip install pymongo
+  - pip install -e "git+https://github.com/atztogo/spglib.git#egg=spglib&subdirectory=python"
+  - pip install -e "git+https://github.com/z4r/python-coveralls.git#egg=coveralls"
+
+# Run test
+script:
+  nosetests -v --with-cov --cover-package pychemia --logging-level=INFO
+
+# Calculate coverage
+after_success:
+  - coveralls

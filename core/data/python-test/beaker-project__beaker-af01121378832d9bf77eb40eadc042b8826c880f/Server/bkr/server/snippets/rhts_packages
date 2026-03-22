@@ -1,0 +1,23 @@
+{# if running the test in a container
+just install docker-io
+#}
+{% if contained_harness is defined %}
+{{ docker_package }}
+{% else %}
+{#
+## If packages variable is set add additional packages to this install
+## packages=httpd:selinux:kernel
+## Add recipe packages only if not overriden by 'packages' variable.
+#}
+{% if packages is defined %}
+{% for package in packages|split(':') %}
+{{ package }}
+{% endfor %}
+{% else %}
+{% if recipe %}
+{% for recipe_package in recipe.packages %}
+{{ recipe_package.package }}
+{% endfor %}
+{% endif %}
+{% endif %}
+{% endif %}

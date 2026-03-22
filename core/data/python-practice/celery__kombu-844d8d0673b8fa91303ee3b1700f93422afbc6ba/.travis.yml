@@ -1,0 +1,58 @@
+language: python
+sudo: false
+cache: pip
+
+env:
+  global:
+    PYTHONUNBUFFERED=yes
+
+stages:
+  - lint
+  - test
+
+matrix:
+  include:
+    - python: 2.7
+      env: TOXENV=2.7
+    - python: 3.4
+      env: TOXENV=3.4
+    - python: 3.5
+      env: TOXENV=3.5
+    - python: 3.6
+      env: TOXENV=3.6
+    - python: 3.7
+      env: TOXENV=3.7
+      sudo: true
+      dist: xenial
+      before_install: sudo apt-get update && sudo apt-get install libgnutls-dev
+    - python: pypy2.7-6.0
+      env: TOXENV=pypy
+      dist: xenial
+      before_install: sudo apt-get update && sudo apt-get install libgnutls-dev
+    - python: pypy3.5-6.0
+      env: TOXENV=pypy3
+      dist: xenial
+      before_install: sudo apt-get update && sudo apt-get install libgnutls-dev
+    - env: TOXENV=flake8
+      stage: lint
+    - env: TOXENV=flakeplus
+      stage: lint
+    - env: TOXENV=apicheck
+      stage: lint
+    - env: TOXENV=pydocstyle
+      stage: lint
+
+install:
+    - pip install -U pip setuptools wheel | cat
+    - pip install -U tox | cat
+script: tox -v -- -v
+after_success:
+  - .tox/$TRAVIS_PYTHON_VERSION/bin/coverage xml
+  - .tox/$TRAVIS_PYTHON_VERSION/bin/codecov -e TOXENV
+notifications:
+  email: false
+  irc:
+    channels:
+      - "chat.freenode.net#celery"
+    on_success: change
+    on_failure: change

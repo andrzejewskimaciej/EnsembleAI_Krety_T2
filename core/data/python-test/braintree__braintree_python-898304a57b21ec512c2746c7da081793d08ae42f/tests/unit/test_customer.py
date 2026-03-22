@@ -1,0 +1,38 @@
+from tests.test_helper import *
+
+class TestCustomer(unittest.TestCase):
+    @raises_with_regexp(KeyError, "'Invalid keys: bad_key'")
+    def test_create_raise_exception_with_bad_keys(self):
+        Customer.create({"bad_key": "value"})
+
+    @raises_with_regexp(KeyError, "'Invalid keys: credit_card\[bad_key\]'")
+    def test_create_raise_exception_with_bad_nested_keys(self):
+        Customer.create({"credit_card": {"bad_key": "value"}})
+
+    @raises_with_regexp(KeyError, "'Invalid keys: bad_key'")
+    def test_update_raise_exception_with_bad_keys(self):
+        Customer.update("id", {"bad_key": "value"})
+
+    @raises_with_regexp(KeyError, "'Invalid keys: credit_card\[bad_key\]'")
+    def test_update_raise_exception_with_bad_nested_keys(self):
+        Customer.update("id", {"credit_card": {"bad_key": "value"}})
+
+    @raises(NotFoundError)
+    def test_finding_empty_id_raises_not_found_exception(self):
+        Customer.find(" ")
+
+    @raises(NotFoundError)
+    def test_finding_none_raises_not_found_exception(self):
+        Customer.find(None)
+
+    def test_initialize_sets_paypal_accounts(self):
+        customer = Customer("gateway", {
+            "paypal_accounts": [
+                {"token": "token1"},
+                {"token": "token2"}
+            ]
+        })
+
+        self.assertEqual(2, len(customer.paypal_accounts))
+        self.assertEqual("token1", customer.paypal_accounts[0].token)
+        self.assertEqual("token2", customer.paypal_accounts[1].token)

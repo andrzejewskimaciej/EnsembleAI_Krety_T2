@@ -1,0 +1,118 @@
+{% if ignoredisk %}
+ignoredisk {{ ignoredisk }}
+{% endif %}
+zerombr
+{% if ondisk %}
+clearpart --drives {{ ondisk }} --all --initlabel
+{% else %}
+clearpart --all --initlabel
+{% endif %}
+
+{% if partitions or ondisk or rootfstype or fstype or swapsize %}
+
+{#
+## Arch Specific Boot requirements
+#}
+{% if distro_tree is arch('ia64') %}
+part /boot/efi --fstype vfat --size 200 --recommended
+{%- if ondisk %} --ondisk={{ ondisk }}{% endif %}
+{% elif distro_tree is arch('ppc', 'ppc64', 'ppc64le') %}
+part None --fstype 'PPC PReP Boot' --size 8
+{%- if ondisk %} --ondisk={{ ondisk }}{% endif %}
+
+part /boot --size 200 --recommended --asprimary
+{%- if fstype %} --fstype {{ fstype }}{% endif %}
+{%- if ondisk %} --ondisk={{ ondisk }}{% endif %}
+{% elif distro_tree is arch('i386', 'x86_64') %}
+{% if system and system.has_efi %}
+{# x86 EFI #}
+part /boot/efi --fstype vfat --size 200 --recommended
+{%- if ondisk %} --ondisk={{ ondisk }}{% endif %}
+{% else %}
+{# x86 BIOS #}
+{% if has_gpt_bios_support is defined %}
+{# biosboot partition is needed in case Anaconda uses GPT (when the disk is >2TB) #}
+part biosboot --size 1 --fstype biosboot
+{%- if ondisk %} --ondisk={{ ondisk }}{% endif %}
+
+{% endif %}
+part /boot --size 200 --recommended --asprimary
+{%- if fstype %} --fstype {{ fstype }}{% endif %}
+{%- if ondisk %} --ondisk={{ ondisk }}{% endif %}
+{% endif %}
+{% else %}
+part /boot --size 200 --recommended --asprimary
+{%- if fstype %} --fstype {{ fstype }}{% endif %}
+{%- if ondisk %} --ondisk={{ ondisk }}{% endif %}
+{% endif %}
+
+{#
+## Basic root Filesystem plus Swap
+#}
+part / --size 1024 --grow
+{%- if rootfstype or fstype %} --fstype {{ rootfstype|default(fstype) }}{% endif %}
+{%- if ondisk %} --ondisk={{ ondisk }}{% endif %}
+
+part swap
+{%- if swapsize %} --size {{ swapsize }}{% else %} --recommended{% endif %}
+{%- if ondisk %} --ondisk={{ ondisk }}{% endif %}
+
+{#
+## Loop through partitions variable and create appropriate part commands
+## partitions=rhel5_pv_guest.img:lvm:10;rhel5_hvm_guest.img:lvm:10
+#partitions = /mnt/block1:part:1;mylvm:lvm:5;/mnt/block4ext4:part:1:ext4dev;mylvm4ext4:lvm:5:ext4dev;/mnt/block2:part:1;/mnt/block24ext4:part:1:ext4dev;mylvm2:lvm:5; 
+# (ext4dev is the fstype in some of them in the above example)
+#}
+{% set is_lvm = 0 %}
+{% for _partition in partitions|default('')|split(';') %}
+{% set partition = _partition|split(':') %}
+{% if partition|length >= 3 %}
+{% set size = partition[2]|int * 1024 %}
+{% if fstype %}
+{% set myfstype = fstype %}
+{% else %}
+{% set myfstype = None %}
+{% endif %}
+{% if partition|length > 3 %}
+{% set myfstype = partition[3] %}
+{% endif %}
+{% set partname = partition[0].lstrip('/') %}
+{% if partition[1] == 'part' %}
+{% if myfstype %} 
+{% if myfstype == 'btrfs' and
+      distro is not osmajor('RedHatEnterpriseLinux6') %}
+{# Recent anaconda versions need a custom command for btrfs #}
+{% set btrfs_vol_label = partname.replace('/', '_') %}
+part btrfs.{{ btrfs_vol_label }} --size={{ size }}
+btrfs /{{ partname }} --label={{ btrfs_vol_label}} btrfs.{{ btrfs_vol_label }}
+{% else %}
+part /{{ partname }} --size={{ size }} --fstype {{ myfstype }}
+{% endif %}
+{% else %}
+part /{{ partname }} --size={{ size }}
+{% endif %}
+{% elif partition[1] == 'lvm' %}
+{% set is_lvm = is_lvm + 1 %}
+{% set lvmname = partname.replace('/', '_') %}
+{% set part_size = size + 5 %}
+part pv.00{{ is_lvm }} --size={{ part_size }}
+volgroup TestVolume00{{ is_lvm }} pv.00{{ is_lvm }}
+logvol /{{ partname }} --name={{ lvmname }} --vgname=TestVolume00{{ is_lvm }} --size={{ size }}
+{%- if myfstype %} --fstype {{ myfstype }}{% endif %}
+
+{% endif %}
+{% endif %}
+{% endfor %}
+
+{% else %}
+{#
+## No special partitions requested. Let Anaconda do what it thinks is right.
+## If autopart_type is specified and a compatible distro is being used
+## use it.
+#}
+{% if autopart_type and has_autopart_type is defined %}
+autopart --type {{ autopart_type }}
+{% else %}
+autopart
+{% endif %}
+{% endif %}

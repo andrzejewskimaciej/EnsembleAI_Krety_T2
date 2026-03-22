@@ -1,0 +1,25 @@
+..
+   Copyright 2009-2011 Ram Rachum. This work is licensed under a Creative
+   Commons Attribution-Share Alike 2.5 Israel License, which may be obtained at
+   http://creativecommons.org/licenses/by-sa/2.5/il/
+
+.. _misc-mailing-lists:
+
+=============
+Mailing Lists
+=============
+
+The main GarlicSim mailing list is at `garlicsim@librelist.org
+<mailto:garlicsim@librelist.org>`_. If you need any kind of help, or have
+anything to say, say it here. You'll get a quick response.
+
+The development mailing list is `garlicsim.dev@librelist.org
+<mailto:garlicsim.dev@librelist.org>`_. This is for the developers who work on
+GarlicSim itself.
+
+To subscribe to a list, just send an empty email to it. This is required before
+you can post anything. Wait for an automated email asking you to confirm, then
+confirm, and only then you will be registered.
+
+These lists are hosted by `librelist <http://librelist.org>`_, which is
+currently slightly experimental.

@@ -1,0 +1,104 @@
+.. -*- mode: rst -*-
+.. vim:syntax=rest
+
+.. _changelog:
+
+Dipy Development Changelog
+-----------------------------
+
+Dipy is a diffusion MR imaging library written in Python
+
+'Close gh-' statements refer to GitHub issues that are available at::
+
+  http://github.com/nipy/dipy/issues
+
+The full VCS changelog is available here:
+
+  http://github.com/nipy/dipy/commits/master
+
+Releases
+~~~~~~~~
+
+Dipy
+++++
+
+The code found in Dipy was created by the following people: Eleftherios Garyfallidis, Matthew Brett, Bago Amirbekian, Ian Nimmo-Smith, Ariel Rokem, Stefan van der Walt, Maxime Descoteaux, Yaroslav Halchenko, Emanuele Olivetti, Michael Paquette, Samuel St-Jean, Endolith, Maria Luisa Mandelli, Mauro Zucchelli, Gabriel Girard, Matthieu Dumont, Kimberly Chan, Erik Ziegler, Emmanuel Caruyer, Matthias Ekman, Jean-Christophe Houde, Sylvain Merlet and
+Christopher Nguyen.
+
+* 0.7.1 (Thursday, 16 Jan 2014)
+
+* Made installing Dipy easier and more universal
+* Fixed automated seeding problems for tracking
+* Removed default parameter for odf_vertices in EuDX
+
+* 0.7.0 (Monday, 23 Dec 2013)
+
+* Constrained Spherical Deconvolution (CSD)
+* Simple Harmonic Oscillator based Reconstruction and Estimation (SHORE)
+* Sharpening Deconvolution Transform (SDT)
+* Signal-to-noise ratio estimation
+* Parallel processing enabled for all reconstruction models using `peaks_from_model`
+* Simultaneous peak and ODF visualization
+* Streamtube visualization
+* Electrostatic repulsion for sphere generation
+* Connectivity matrices and density maps
+* Streamline filtering through specific ROIs using `target`
+* Brain extraction and foreground extraction using `median_otsu`
+* RESTORE fitting for DTI
+* Westin's Tensor maps
+* Access to more publicly available datasets directly through Dipy functions.
+* 3x more tutorials than previous release
+
+
+* 0.6.0 (Sunday, 24 Mar 2013)
+
+* Cython 0.17+ enforced
+* New reconstruction models API
+* Diffusion Spectrum Imaging (DSI)
+* DSI with deconvolution
+* Generalized Q-sampling Imaging 2 (GQI2)
+* Modular fiber tracking
+  * deterministic
+  * probabilistic
+* Fast volume indexing (a faster ndindex)
+* Spherical Harmonic Models
+  * Opdt (Tristan-Vega et. al)
+  * CSA odf (Aganj et. al)
+  * Analytical Q-ball (Descoteuax et. al)
+  * Tuch's Q-ball (Tuch et. al)
+* Visualization of spherical functions
+* Peak finding in odfs
+* Non-linear peak finding
+* Sphere Object
+* Gradients Object
+* 2D sphere plotting
+* MultiTensor and Ball & Sticks voxel simulations
+* Fetch/Download data for examples
+* Software phantom generation
+* Angular similarity for comparisons between multiple peaks
+* SingleVoxelModel to MultiVoxelModel decorator
+* Mrtrix and fibernavigator SH bases
+* More Benchmarks
+* More Tests
+* Color FA and other Tensor metrics added
+* Scripts for the ISBI 2013 competition
+* Fit_tensor script added
+* Radial basis function interpolation on the sphere
+* New examples/tutorials
+
+
+* 0.5.0 (Friday, 11 Feb 2011)
+
+  * Initial release.
+
+    * Reconstruction algorithms e.g. GQI, DTI
+    * Tractography generation algorithms e.g. EuDX
+    * Intelligent downsampling of tracks
+    * Ultra fast tractography clustering
+    * Resampling datasets with anisotropic voxels to isotropic
+    * Visualizing multiple brains simultaneously
+    * Finding track correspondence between different brains
+    * Reading many different file formats e.g. Trackvis or Nifti
+    * Dealing with huge tractographies without memory restrictions
+    * Playing with datasets interactively without storing
+    * And much more and even more to come in next releases

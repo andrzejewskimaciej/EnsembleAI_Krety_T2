@@ -1,0 +1,57 @@
+
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+
+// system page
+
+.system-tabs {
+    overflow: visible;
+}
+
+.system-quick-info {
+    // Matches the style of .page-header immediately above it.
+    padding-bottom: @baseLineHeight;
+    border-bottom: 1px solid @grayLighter;
+    margin-bottom: @baseLineHeight;
+    > div {
+        // vertical border between columns
+        border-left: 1px solid @grayLighter;
+        padding-left: @fluidGridGutterWidth;
+        &:first-child {
+            border-left: none;
+            padding-left: 0;
+        }
+    }
+}
+
+.system-status-reason, .system-loan-comment {
+    .well;
+    .well-small;
+    // reset bottom margin to match p
+    margin-bottom: @baseLineHeight / 2;
+}
+
+.system-provision {
+    .install-options input {
+        .input-xlarge;
+    }
+}
+
+.system-notify-cc {
+    li {
+        list-style: none;
+        margin: 0.75em 0;
+    }
+    a.cc-remove {
+        color: @gray;
+        text-decoration: none;
+        font-size: 1.25em;
+    }
+}
+
+#access-policy .table .btn {
+    // Reset to default button padding
+    padding: 4px 12px;
+}

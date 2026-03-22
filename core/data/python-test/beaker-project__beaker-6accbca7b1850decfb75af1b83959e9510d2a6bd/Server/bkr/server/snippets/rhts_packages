@@ -1,0 +1,7 @@
+{#
+## If packages variable is set add additional packages to this install
+## packages=httpd:selinux:kernel
+#}
+{% for package in packages|default('')|split(':') %}
+{{ package }}
+{% endfor %}

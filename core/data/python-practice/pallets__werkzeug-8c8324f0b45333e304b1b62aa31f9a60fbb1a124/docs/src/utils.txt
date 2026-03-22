@@ -1,0 +1,248 @@
+=========
+Utilities
+=========
+
+Werkzeug comes with a bunch of utilties that can be useful for WSGI
+applications. Most of the classes provided by this module are used by the
+wrappers, you can however use them without the wrappers too.
+
+
+MultiDict
+=========
+
+A `MultiDict` is a dictionary subclass customized to deal with multiple values
+for the same key which is for example used by the parsing functions in the
+wrappers. This is necessary because some HTML form elements pass multiple values
+for the same key.
+
+`MultiDict` implements the all standard dictionary methods. Internally, it
+saves all values for a key as a list, but the standard dict access methods will
+only return the first value for a key. If you want to gain access to the
+other values too you have to use the `list` methods as explained below.
+
+You can construct a `MultiDict` from a list of ``(key, value)`` tuples, a dict
+or another `MultiDict`.
+
+Basic Usage:
+
+.. sourcecode:: pycon
+
+    >>> from werkzeug.utils import MultiDict
+    >>> d = MultiDict([('a', 'b'), ('a', 'c')])
+    >>> d
+    MultiDict([('a', 'b'), ('a', 'c')])
+    >>> d['a']
+    'b'
+    >>> d.getlist('a')
+    ['b', 'c']
+    >>> 'a' in d
+    True
+
+It behaves like a normal dict thus all dict functions will only return the
+first value when multiple values for one key are found.
+
+The following additional functions exist that are used to get or set the other
+values for a key:
+
+`getlist`
+    Return the list of items for a given key. If that key is not in the
+    `MultiDict`, the return value will be an empty list.
+
+`setlist`
+    Remove the old values for a key and add new ones. Note that the list you
+    pass the values in will be shallow-copied before it is inserted in the
+    dictionary.
+    
+    .. sourcecode:: pycon
+    
+        >>> multidict.setlist('foo', ['1', '2'])
+        >>> multidict['foo']
+        '1'
+        >>> multidict.getlist('foo')
+        ['1', '2']
+
+`setlistdefault`
+    Like `setdefault` but sets multiple values.
+
+`lists`
+    Like `items` but the values will be lists with all the values for
+    a key.
+
+`listvalues`
+    Like `values` but it will return lists for all values instead
+    of only the first value.
+
+`iterlists`
+    Like `lists` but returns an iterator.
+
+`iterlistvalues`
+    Like `itervalues` but it will yield lists for all values instead
+    of only the first value.
+
+`poplist`
+    Like `pop` for normal dicts; pops all the values for a key and
+    removes the key from the dict.
+
+`popitemlist`
+    Like `popitem` for normal dicts; pops all the values for a key,
+    removes the key from the dict and then returns a tuple in the
+    form ``(key, values)``.
+
+Also notable: `update` adds values and does not replace existing.
+
+
+CombinedMultiDict
+=================
+
+A read only `MultiDict` decorator that you can pass multiple `MultiDict`
+instances as sequence and it will combine the return values of all wrapped
+dicts:
+
+.. sourcecode:: pycon
+
+    >>> from werkzeug.utils import MultiDict, CombinedMultiDict
+    >>> post = MultiDict([('foo', 'bar')])
+    >>> get = MultiDict([('blub', 'blah')])
+    >>> combined = CombinedMultiDict([get, post])
+    >>> combined['foo']
+    'bar'
+    >>> combined['blub']
+    'blah'
+
+This works for all read operations and will raise a `TypeError` for methods
+that want to change data which isn't possible.
+
+
+Headers
+=======
+
+Another useful class is `Headers`. It behaves in a similar to a `MultiDict`
+but it stores the values in a different way. In fact it's not a dict at all,
+it's more a list because the values are stored both sorted and unhashed.
+
+This data structure is useful if you want a nicer way to handle WSGI
+headers which are stored as tuples in a list.
+
+Changes to `MultiDict`:
+
+`iterlistvalues` and `listvalues` are missing because `itervalues` and
+`values` work completely different.
+
+`add`
+    Add a new value to a key ``foo.add('Content-Type', 'text/plain')``
+
+`__iter__`
+    yields ``(key, value)`` tuples.
+
+`set` / `__setitem__`
+    remove all old keys and add a new value. 
+
+`to_list`
+    Convert the headers into a list and converts the unicode headers to
+    the specified charset. The charset parameter is obligatory.
+    (``foo.to_list('utf-8')``)
+
+`getlist`
+    Return a list of allvalues for a given key
+
+`setlist`
+    Add a list of values to a given key. Removes all old values for this
+    key first.
+
+`addlist`
+    Add a list of values to the headers for this key.
+
+`itervalues` and similar methods...
+    ...yield all values for a key, not only the first one! `iterkeys` can
+    of corse yield multiple keys with the same name analog to that.
+
+
+FileStorage
+===========
+
+The `FileStorage` object is a thin wrapper over incoming files. It has
+the following attributes and methods:
+
+`name`
+    The name of the form field which represents the data.
+
+`filename`
+    The incoming filename
+
+`content_type`
+    The mimetype of the file. For example ``'text/html'``.
+
+`content_length / len()`
+    The expected length of the file.
+
+`read([bytes])`
+    Read `bytes` or all of the incoming file. Note that the default
+    wrappers store the incoming data on the filesystem rather than the
+    RAM. Thus you should keep in mind that reading without an maxmimum
+    length can easily break your application if the user submitted data
+    is too big.
+
+`readline() / readlines() / __iter__`
+    Behave like the methods of any other file object.
+
+`stream`
+    Gives you access to the underlaying stream. Note that the exact
+    methods of this stream and it's type is not strictly specified. In
+    most situations it will be a `TemporaryFile` object.
+
+
+SharedDataMiddleware
+====================
+
+A WSGI middleware that provides static content for development environments
+or simple server setups. Usage is quite simple:
+
+.. sourcecode:: python
+
+    import os
+    from werkzeug.utils import SharedDataMiddleware
+
+    app = SharedDataMiddleware(app, {
+        '/shared': os.path.join(os.path.dirname(__file__), 'shared')
+    })
+
+The contents of the folder ``./shared`` will now be available on
+``http://example.com/shared/``. This is pretty useful if you don't want
+to start a standalone media server or something like that.
+
+
+Helper Functions
+================
+
+`url_decode(s, charset='utf-8')`
+    parse a querystring and return it as `MultiDict`.
+
+`url_encode(s, charset='utf-8')`
+    URL encode a dict/`MultiDict`.
+
+`url_quote(s, charset='utf-8')`
+    URL encode a single string with a given encoding.
+
+`url_unquote(s, charset='utf-8')`
+    URL decode a single string with a given decoding.
+
+`escape(s, quote=False)`
+    SGML/XML escape an unicode object or string.
+
+`get_current_url(environ)`
+    Return the absolute, canonical URL for the current request.
+
+`lazy_property(func)`
+    A decorator that converts a function into a lazy property. The
+    function wrapped is called the first time to retrieve the result
+    and than that calculated result is used the next time you access
+    the value.
+
+    .. sourcecode:: python
+
+        class Foo(object):
+
+            @lazy_property
+            def foo(self):
+                # calculate something important here
+                return 42

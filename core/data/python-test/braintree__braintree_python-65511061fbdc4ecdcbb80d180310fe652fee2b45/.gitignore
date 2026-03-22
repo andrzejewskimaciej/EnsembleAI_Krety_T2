@@ -1,0 +1,8 @@
+*.pyc
+/dist
+/docs/_build
+/tags
+MANIFEST
+build
+/venv
+.idea

@@ -1,0 +1,8 @@
+INFO: Running Recursive Dependency Engine (smartmap) on stage 'start'
+INFO: Writing 1 predictions securely to predictions/python-start-smartmap-short-prefix.jsonl
+Traceback (most recent call last):
+  File "/Users/piotrkot/Programming/PycharmProjects/TASK_2/engine.py", line 407, in <module>
+    main()
+  File "/Users/piotrkot/Programming/PycharmProjects/TASK_2/engine.py", line 395, in main
+    print(f"DEBUG: GST Size is {len(gst)} symbols.")
+NameError: name 'gst' is not defined

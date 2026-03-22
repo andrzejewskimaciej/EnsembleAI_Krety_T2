@@ -1,0 +1,162 @@
+set -x
+# Check in with Beaker Server, let it know our hostname, and
+# record our install time.
+REPORTED_FQDN=$(hostname -f)
+{# Note that the last string comparison relies on bash prefix matching, not globbing #}
+if [[ -z "$REPORTED_FQDN" || $REPORTED_FQDN == localhost || $REPORTED_FQDN == localhost.* ]] ; then
+    # hostname -f is the most future-proof approach, but it isn't always reliable
+    if [ -f /etc/hostname ] ; then
+        # Preferred fallback if the OS is recent enough to provide it
+        REPORTED_FQDN=$(cat /etc/hostname)
+    elif grep -q ^HOSTNAME= /etc/sysconfig/network ; then
+        # Last resort fallback to try to report something sensible
+        REPORTED_FQDN=$(grep ^HOSTNAME= /etc/sysconfig/network | cut -f2- -d=)
+    fi
+fi
+{% if distro is osmajor('RedHatEnterpriseLinux3', 'RedHatEnterpriseLinux4', 'RedHatEnterpriseLinuxServer5', 'RedHatEnterpriseLinuxServerGrid5', 'RedHatEnterpriseLinuxClient5') %}
+wget -O - http://{{ lab_controller.fqdn }}:8000/install_done/{{ recipe.id }}/$REPORTED_FQDN
+{% else %}
+curl http://{{ lab_controller.fqdn }}:8000/install_done/{{ recipe.id }}/$REPORTED_FQDN
+{% endif %}
+
+{% snippet 'clear_netboot' %}
+{% if recipe %}
+echo {{ recipe.id }} > /root/RECIPE.TXT
+{% endif %}
+
+# If netboot_method= is found in /proc/cmdline record it to /root
+netboot_method=$(perl -n -e'/netboot_method=([^\s]+)/ && print $1' /proc/cmdline)
+if [ -n "$netboot_method" ]; then
+echo $netboot_method >/root/NETBOOT_METHOD.TXT
+fi
+
+# Enable post-install boot notification
+{% snippet 'post_anamon' %}
+{% if distro is osmajor('RedHatEnterpriseLinux6', 'RedHatEnterpriseLinuxGrid6') %}
+{% snippet 'readahead_sysconfig' %}
+{% endif %}
+{% snippet 'linkdelay' %}
+
+{# We normally want to make sure the system time is accurate, in case 
+ # a previous recipe has munged it. But if users want to opt out of this 
+ # behaviour they can set 'no_clock_sync'.
+ #}
+{% if no_clock_sync is undefined %}
+if [ -e /etc/sysconfig/ntpdate ] ; then
+    /sbin/chkconfig ntpdate on >/dev/null 2>&1 || :
+fi
+if [ -e "/etc/sysconfig/ntpd" ]; then
+    /sbin/chkconfig ntpd on >/dev/null 2>&1 || :
+    GOT_G=$(/bin/cat /etc/sysconfig/ntpd | grep -E '^OPTIONS' | grep '\-g')
+
+    if [ -z "$GOT_G" ]; then
+        /bin/sed -i -r 's/(^OPTIONS\s*=\s*)(['\''|"])(.+)$/\1\2\-x \3 /' /etc/sysconfig/ntpd
+    fi
+fi
+if [ -e /etc/chrony.conf ] ; then
+    cp /etc/chrony.conf{,.orig}
+    # use only DHCP-provided time servers, no default pool servers
+    sed -i '/^server /d' /etc/chrony.conf
+    cp /etc/sysconfig/network{,.orig}
+    # setting iburst should speed up initial sync
+    # https://bugzilla.redhat.com/show_bug.cgi?id=787042#c12
+    echo NTPSERVERARGS=iburst >>/etc/sysconfig/network
+    /sbin/chkconfig ntpd off >/dev/null 2>&1 || :
+    /sbin/chkconfig ntpdate off >/dev/null 2>&1 || :
+fi
+{% endif %}
+
+{% if grubport %}
+{#
+#/bin/sed -i 's/^serial.*/serial --port={{ grubport }} --speed=115200/' /boot/grub/grub.conf
+#}
+if [ -e "/boot/grub/grub.conf" ]; then
+    /bin/sed -i 's/^\(serial.*\)--unit=\S\+\(.*\)$/\1--port={{ grubport }}\2/' /boot/grub/grub.conf
+elif [ -e "/etc/default/grub" ]; then
+    /bin/sed -i '/^GRUB_SERIAL_COMMAND="serial/ {s/--unit=[0-9]\+//; s/"$/ --port={{ grubport }}"/}' /etc/default/grub
+    /sbin/grub2-mkconfig -o /boot/grub2/grub.cfg
+fi
+{% endif %}
+
+{% snippet 'boot_order' %}
+
+{% if not yum %}
+{% if distro is osmajor('RedHatEnterpriseLinux3') %}
+{% set yum = 'yum-2.2.2-1.rhts.EL3.noarch.rpm' %}
+{% elif distro is osmajor('RedHatEnterpriseLinux4') %}
+{% set yum = 'yum-2.2.2-1.rhts.EL4.noarch.rpm' %}
+{% endif %}
+{% endif %}
+
+{% if yum %}
+# Install Yum
+pushd /root
+{% if distro is osmajor('RedHatEnterpriseLinux3', 'RedHatEnterpriseLinux4', 'RedHatEnterpriseLinuxServer5', 'RedHatEnterpriseLinuxServerGrid5', 'RedHatEnterpriseLinuxClient5') %}
+/usr/bin/wget -N http://{{ lab_controller.fqdn }}/beaker/{{ yum }}
+{% else %}
+curl -R http://{{ lab_controller.fqdn }}/beaker/{{ yum }} -o {{ yum }}
+{% endif %}
+/bin/rpm -Uvh {{ yum }}
+popd
+{% endif %}
+
+#Add Task Repo
+{% if taskrepo %}
+{% set reponame, repourl = taskrepo.split(',', 1) %}
+cat <<"EOF" >/etc/yum.repos.d/{{ reponame }}.repo
+[{{ reponame }}]
+name={{ reponame }}
+baseurl={{ repourl }}
+enabled=1
+gpgcheck=0
+EOF
+{% endif %}
+
+
+# Add Harness Repo
+{% if harnessrepo %}
+{% set reponame, repourl = harnessrepo.split(',', 1) %}
+cat <<"EOF" >/etc/yum.repos.d/{{ reponame }}.repo
+[{{ reponame }}]
+name={{ reponame }}
+baseurl={{ repourl }}
+enabled=1
+gpgcheck=0
+EOF
+{% endif %}
+
+# Add distro and custom Repos
+{{ snippet('print_repos') }}
+
+# fill the yum cache and redirect output to /dev/null
+# This speeds up yum because of a bug where it will update stdout too often.
+# http://lists.baseurl.org/pipermail/yum-devel/2011-December/008857.html
+yum check-update > /dev/null 2>&1 || true
+{% if recipe %}
+{% if harness|default('beah') == 'beah' %}
+{% snippet 'beah' %}
+{% else %}
+{% snippet 'harness' %}
+{% endif %}
+{% endif %}
+
+#Add test user account
+useradd --password '$6$oIW3o2Mr$XbWZKaM7nA.cQqudfDJScupXOia5h1u517t6Htx/Q/MgXm82Pc/OcytatTeI4ULNWOMJzvpCigWiL4xKP9PX4.' test
+{% snippet 'beaker_env' %}
+{% snippet 'lab_env' %}
+{% snippet 'ssh_keys' %}
+{% if system and system.kernel_type.kernel_type == 'highbank' %}
+{% snippet 'highbank' %}
+{% endif %}
+{% if system and system.kernel_type.kernel_type == 'mvebu' %}
+{% snippet 'mvebu' %}
+{% endif %}
+{% if recipe %}
+# Check in with Beaker Server, record our postinstall time.
+{% if distro is osmajor('RedHatEnterpriseLinux3', 'RedHatEnterpriseLinux4', 'RedHatEnterpriseLinuxServer5', 'RedHatEnterpriseLinuxServerGrid5', 'RedHatEnterpriseLinuxClient5') %}
+wget -O - http://{{ lab_controller.fqdn }}:8000/postinstall_done/{{ recipe.id }}
+{% else %}
+curl http://{{ lab_controller.fqdn }}:8000/postinstall_done/{{ recipe.id }}
+{% endif %}
+{% endif %}
+{% snippet 'disable_rhts_compat' %}

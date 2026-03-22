@@ -1,0 +1,34 @@
+# Base URL of the Beaker server (without trailing slash!)
+HUB_URL = "http://localhost/bkr"
+
+# Hub authentication method
+#AUTH_METHOD = "krbv"
+AUTH_METHOD = "password"
+
+# Username and password
+#USERNAME = ""
+#PASSWORD = ""
+
+# Kerberos principal. If commented, default principal obtained by kinit is used.
+#KRB_PRINCIPAL = "host/$HOSTNAME"
+
+# Kerberos keytab file.
+#KRB_KEYTAB = "/etc/krb5.keytab"
+
+# Kerberos service prefix. Example: host, HTTP
+#KRB_SERVICE = "HTTP"
+
+# Kerberos realm. If commented, last two parts of domain name are used. Example: MYDOMAIN.COM.
+#KRB_REALM = "EXAMPLE.COM"
+
+# Kerberos credential cache file.
+#KRB_CCACHE = ""
+
+# SSL CA certificate to verify the Beaker server's SSL certificate.
+# By default, uses the system-wide CA certificate bundle.
+#CA_CERT = ""
+
+# By default the command will fail if the Beaker server's SSL certificate is
+# invalid or not signed by a trusted CA. Set this to False to disable validity
+# checks. The --insecure option has the same effect.
+#SSL_VERIFY = True

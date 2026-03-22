@@ -1,0 +1,966 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- vim: set sw=2: -->
+<!--
+This schema is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+-->
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+  <start>
+    <ref name="job"/>
+  </start>
+  <define name="job">
+    <element name="job">
+      <interleave>
+        <zeroOrMore>
+          <element>
+            <a:documentation xml:lang="en">
+              Extra XML provided by the user. Must have a namespace. Beaker will
+              preserve the XML when cloning the job.
+            </a:documentation>
+            <anyName>
+              <except>
+                <nsName ns="" />
+              </except>
+            </anyName>
+            <ref name="anyAttributes" />
+            <ref name="anyContent" />
+          </element>
+        </zeroOrMore>
+        <optional>
+          <attribute name="user">
+          <a:documentation xml:lang="en">
+          Specifies the user who will be the owner of this job.
+          This requires that the submitting user is a valid delegate of
+          the user.
+          </a:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="group">
+          <a:documentation xml:lang="en">
+          Specifies the group this job was submitted on behalf of.
+          This will allow other group members to view and modify this job.
+          </a:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="retention_tag">
+          <a:documentation xml:lang="en">
+            Specifies the data retention policy for the job. See http://your-beaker-server/retentiontag/
+            for the possible values. Some of these tags may require a
+            product to be specified (see below).
+            </a:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="product">
+          <a:documentation xml:lang="en">
+            Specifies the product with which this job is associated.
+            The product names are customized to suit a beaker
+            deployment and hence there there are no standard or default
+            product names shipped with Beaker. Note that this
+            specification is meaningful only for retention tagging purposes (see
+            above). 
+          </a:documentation>
+          </attribute>
+       </optional>
+        <optional>
+          <ref name="notify"/>
+        </optional>
+        <optional>
+          <element name="whiteboard">
+            <a:documentation xml:lang="en">
+              A textual description of this job, for human consumption only.
+            </a:documentation>
+            <text/>
+          </element>
+        </optional>
+        <oneOrMore>
+          <element name="recipeSet">
+            <a:documentation xml:lang="en">
+              A recipeset defines one or more recipes which are to be run in
+              parallel. Define multiple recipes within a recipeset for
+              multihost testing. Otherwise, define only one recipe within the
+              recipeset.
+            </a:documentation>
+            <optional>
+              <attribute name="priority">
+              <a:documentation xml:lang="en">
+                Sets the scheduling priority of this job. Possible values are low,
+                medium, normal, high and urgent.
+              </a:documentation>
+              <choice>
+                <value>Low</value>
+                <value>Medium</value>
+                <value>Normal</value>
+                <value>High</value>
+                <value>Urgent</value>
+              </choice>
+              </attribute>
+            </optional>
+            <oneOrMore>
+              <ref name="recipe"/>
+            </oneOrMore>
+          </element>
+        </oneOrMore>
+      </interleave>
+    </element>
+  </define>
+  <define name="notify">
+    <element name="notify">
+      <a:documentation xml:lang="en">
+        This element is a container for configuring notifications that this
+        job has finished running.
+      </a:documentation>
+      <zeroOrMore>
+        <element name="cc">
+          <a:documentation xml:lang="en">
+            An e-mail address which will be cc'ed on the job completion e-mail.
+          </a:documentation>
+          <text/>
+        </element>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="recipe">
+    <element name="recipe">
+      <a:documentation xml:lang="en">
+        A recipe is a sequence of tasks which are run on a single system,
+        in parallel with any other recipes in the same recipeset.
+        The system is always provisioned with an operating system at the start
+        of each recipe. Options for provisioning are contained within this
+        element.
+      </a:documentation>
+      <interleave>
+        <zeroOrMore>
+          <element name="guestrecipe">
+            <interleave>
+              <optional>
+                <attribute name="guestname" />
+              </optional>
+              <attribute name="guestargs" />
+              <ref name="recipe_contents" />
+            </interleave>
+          </element>
+        </zeroOrMore>
+        <ref name="recipe_contents" />
+      </interleave>
+    </element>
+  </define>
+  <define name="recipe_contents">
+    <!-- stuff which is common to both <recipe/> and <guestrecipe/> -->
+    <interleave>
+      <optional>
+        <attribute name="kernel_options">
+        <a:documentation xml:lang="en">
+          Additional kernel options to be passed to Anaconda during installation.
+        </a:documentation>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="kernel_options_post">
+        <a:documentation xml:lang="en">
+          Additional kernel options to be passed to Anaconda after installation.
+        </a:documentation>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="ks_meta">
+        <a:documentation xml:lang="en">
+          Additional kickstart metadata variables.
+        </a:documentation>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="role">
+        <a:documentation xml:lang="en">
+          If a role is specified, an environment variable of the same
+          name will be created on each of the hosts the test runs. The value
+          of the environment variable will be set to a space-separated
+          list of all the host names in that role. If there are multiple
+          roles, there will an environment variable for each of them
+          present on all the hosts the test runs. Useful for multihost
+          tests (see the role attribute for the task element).
+        </a:documentation>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="whiteboard">
+          <a:documentation xml:lang="en">
+            A textual description of this recipe, for human consumption only.
+          </a:documentation>
+          <text/>
+        </attribute>
+      </optional>
+      <optional>
+        <ref name="autopick"/>
+      </optional>
+      <optional>
+        <element name="kickstart">
+        <a:documentation xml:lang="en">
+          You can specify a custom kickstart template here. This template should be a
+          valid Jinja2 template. Review the existing kickstart templates to get
+          an idea of what you can specify here. Beaker will add extra
+          "defaults" based on the system options specified in the recipe
+          such as the architecture and distro.
+        </a:documentation>
+        <text/>
+        </element>
+      </optional>
+      <optional>
+        <ref name="watchdog"/>
+      </optional>
+      <optional>
+        <ref name="packages"/>
+      </optional>
+      <optional>
+        <ref name="ks_appends"/>
+      </optional>
+      <optional>
+        <ref name="repos"/>
+      </optional>
+      <element name="distroRequires">
+        <a:documentation xml:lang="en">
+          This element is a container for expressing constraints on the
+          operating system distribution which will be selected and
+          provisioned at the start of this recipe.
+        </a:documentation>
+        <zeroOrMore><ref name="distroreq"/></zeroOrMore>
+      </element>
+      <element name="hostRequires">
+        <a:documentation xml:lang="en">
+          This element is a container for expressing constraints on the
+          system which will be selected to run this recipe.
+        </a:documentation>
+        <choice>
+          <attribute name="force">
+            <data type="string"/>
+            <a:documentation xml:lang="en">
+            Select a specific system by FQDN. This bypasses the
+            normal filtering mechanisms for selecting a system,
+            and always uses the named system regardless of its
+            current condition. No other filter criteria can be
+            specified when this attribute is used.
+            </a:documentation>
+          </attribute>
+          <zeroOrMore>
+            <ref name="hostreq"/>
+          </zeroOrMore>
+        </choice>
+      </element>
+      <optional>
+        <ref name="partitions"/>
+      </optional>
+      <oneOrMore>
+        <ref name="task"/>
+      </oneOrMore>
+      <optional>
+        <element name="reservesys">
+          <a:documentation xml:lang="en">
+            If this element is specified, the system will be reserved
+            at the end of the recipe when all tasks have completed execution.
+          </a:documentation>
+          <optional>
+            <attribute name="duration">
+              <a:documentation xml:lang="en">
+                Reserve for the specified duration in seconds. If not
+                specified, this defaults to 86400 seconds or 24 hours.
+              </a:documentation>
+            </attribute>
+          </optional>
+        </element>
+      </optional>
+    </interleave>
+  </define>
+  <define name="autopick">
+    <element name="autopick">
+      <a:documentation xml:lang="en">
+        Settings that influence the selection of the system used to run this
+        recipe without imposing strict constraints as 'hostRequires' does.
+      </a:documentation>
+      <optional>
+        <attribute name="random">
+          <a:documentation xml:lang="en">
+            When set to "true", randomizes the choice of system across all
+            eligible systems. This can help avoid a recipe being repeatedly
+            scheduled on the same system.
+            When omitted or set to "false", the system selection is done
+            according to a default ordering that favours the user's
+            systems, then systems associated with the user's groups and
+            finally systems generally available to all users of the Beaker
+            instance.
+          </a:documentation>
+          <choice>
+            <data type="boolean"/>
+            <value>TRUE</value>
+            <value>FALSE</value>
+          </choice>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+  <define name="watchdog">
+    <element name="watchdog">
+      <optional>
+        <attribute name="panic">
+        <a:documentation xml:lang="en">
+          If the value is set to 'ignore', jobs which output panics to the console
+          are not aborted. If absent, such jobs will be aborted by the
+          watchdog. The default value is None.
+        </a:documentation>
+          <choice>
+            <value>ignore</value>
+            <value>None</value>
+          </choice>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+  <define name="ks_appends">
+    <element name="ks_appends">
+      <zeroOrMore>
+       <element name="ks_append">
+        <a:documentation xml:lang="en">
+          You can specify additional kickstart commands to add to the base kickstart file.
+        </a:documentation>
+        <text/>
+        </element>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="packages">
+    <element name="packages">
+        <a:documentation xml:lang="en">
+          This element is a container for specifying additional packages
+          to be installed for this recipe. These packages are appended
+          to the existing default set of packages.
+        </a:documentation>
+        <zeroOrMore>
+          <element name="package">
+          <attribute name="name"/>
+          </element>
+        </zeroOrMore>
+    </element>
+  </define>
+  <define name="repos">
+    <element name="repos">
+      <a:documentation xml:lang="en">
+        This element is a container for defining additional
+        repositories. These are also available during installation.
+      </a:documentation>
+      <zeroOrMore>
+        <element name="repo">
+          <attribute name="name"/>
+          <attribute name="url"/>
+        </element>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="partitions">
+    <element name="partitions">
+      <zeroOrMore>
+        <element name="partition">
+          <optional>
+            <attribute name="fs">
+              <a:documentation xml:lang="en">
+                Type of filesystem to be created on this partition. Defaults to
+                'ext3' if not specified.
+              </a:documentation>
+              <text/>
+            </attribute>
+          </optional>
+          <attribute name="name">
+            <a:documentation xml:lang="en">
+              Mount point without the initial slash. Eg: 'mnt/test'.
+            </a:documentation>
+          <text/>
+          </attribute>
+          <optional>
+            <attribute name="type">
+             <a:documentation xml:lang="en">
+               part = Partition, lvm = LVM volume
+              </a:documentation>
+            <text/>
+           </attribute>
+          </optional>
+          <attribute name="size">
+            <data type="integer"/>
+            <a:documentation xml:lang="en">
+            Partition size in GB.
+            </a:documentation>
+          </attribute>
+        </element>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="task">
+    <element name="task">
+      <choice>
+        <attribute name="name">
+          <a:documentation xml:lang="en">
+            Name of the task. When no fetch element is specified, the named
+            task must exist in Beaker's task library.
+          </a:documentation>
+        </attribute>
+        <group>
+          <element name="fetch">
+            <attribute name="url">
+              <a:documentation xml:lang="en">
+                URL from which the harness should fetch the task. Refer to the
+                harness documentation for supported URL schemes and task
+                formats.
+              </a:documentation>
+              <data type="anyURI"/>
+            </attribute>
+            <optional>
+              <attribute name="subdir">
+                <a:documentation xml:lang="en">
+                  If the fetch URL points at an archive or repository
+                  containing multiple tasks, this attribute identifies which
+                  subtree the harness should use to find the task.
+                  The default value is the empty string ("") which means that
+                  the task is at the root of the archive.
+                </a:documentation>
+              </attribute>
+            </optional>
+          </element>
+          <optional>
+            <attribute name="name">
+              <a:documentation xml:lang="en">
+                Name of the task. When the fetch element is specified, the task
+                name is only used to report results (the task need not exist in
+                Beaker's task library).
+
+                If the task name is not given, it defaults to the fetch URL
+                combined with the subdirectory (if any). The task name can also
+                be updated by the harness when the recipe executes.
+              </a:documentation>
+            </attribute>
+          </optional>
+        </group>
+      </choice>
+      <optional>
+        <attribute name="role">
+            <a:documentation xml:lang="en">
+              If the task is standalone, specify STANDALONE. If this is
+              a multihost task, then either specify CLIENTS or
+              SERVERS. If it is not relevant, simply omit. This
+              sets up an environment variable of the same name as
+              specified in the role (Also, see the role attribute in
+              the recipe element).
+            </a:documentation>
+        </attribute>
+      </optional>
+      <optional>
+        <element name="params">
+          <zeroOrMore>
+            <element name="param">
+              <a:documentation xml:lang="en">
+                You can specify additional parameters in name=value formats
+                for the task. These parameters are set in the
+                environment when the task is executed.
+              </a:documentation>
+              <attribute name="name"/>
+              <attribute name="value"/>
+            </element>
+          </zeroOrMore>
+        </element>
+      </optional>
+    </element>
+  </define>
+  <define name="distroreq">
+    <choice>
+      <element name="and">
+        <zeroOrMore><ref name="distroreq"/></zeroOrMore>
+      </element>
+      <element name="or">
+        <zeroOrMore><ref name="distroreq"/></zeroOrMore>
+      </element>
+      <element name="not">
+        <zeroOrMore><ref name="distroreq"/></zeroOrMore>
+      </element>
+      <element name="distro_family">
+        <a:documentation xml:lang="en">
+          Deprecated.  Use &lt;family&gt; instead.
+        </a:documentation>
+        <ref name="req"/>
+      </element>
+      <element name="family"><ref name="req"/></element>
+      <element name="distro_name">
+        <a:documentation xml:lang="en">
+          Deprecated.  Use &lt;name&gt; instead.
+        </a:documentation>
+        <ref name="req"/>
+      </element>
+      <element name="name"><ref name="req"/></element>
+      <element name="distro_tag">
+        <a:documentation xml:lang="en">
+          Deprecated.  Use &lt;tag&gt; instead.
+        </a:documentation>
+        <ref name="req"/>
+      </element>
+      <element name="tag"><ref name="req"/></element>
+      <element name="distro_variant">
+        <a:documentation xml:lang="en">
+          Deprecated.  Use &lt;variant&gt; instead.
+        </a:documentation>
+        <ref name="req"/>
+      </element>
+      <element name="variant"><ref name="req"/></element>
+      <element name="distro_arch">
+        <a:documentation xml:lang="en">
+          Deprecated.  Use &lt;arch&gt; instead.
+        </a:documentation>
+        <ref name="req"/>
+      </element>
+      <element name="arch"><ref name="req"/></element>
+      <element name="distro_virt">
+        <a:documentation xml:lang="en">
+          Deprecated.
+        </a:documentation>
+        <ref name="req"/>
+      </element>
+      <element name="distro_method">
+        <a:documentation xml:lang="en">
+          Deprecated.  Use &lt;method&gt; instead.
+        </a:documentation>
+        <ref name="req"/>
+      </element>
+      <element name="method"><ref name="req"/></element>
+      <element name="distrolabcontroller">
+        <a:documentation xml:lang="en">
+          Deprecated.  Use &lt;labcontroller&gt; instead.
+        </a:documentation>
+        <ref name="req"/>
+      </element>
+      <element name="labcontroller"><ref name="req"/></element>
+    </choice>
+  </define>
+  <define name="hostreq">
+    <choice>
+      <element name="and">
+        <zeroOrMore><ref name="hostreq"/></zeroOrMore>
+      </element>
+      <element name="or">
+        <zeroOrMore><ref name="hostreq"/></zeroOrMore>
+      </element>
+      <element name="not">
+        <zeroOrMore><ref name="hostreq"/></zeroOrMore>
+      </element>
+      <element name="host">
+        <a:documentation xml:lang="en">
+          Deprecated.  Use &lt;system&gt;&lt;name&gt; instead.
+        </a:documentation>
+        <ref name="req"/>
+      </element>
+      <element name="labcontroller"><ref name="req"/></element>
+      <element name="hostlabcontroller">
+        <a:documentation xml:lang="en">
+          Deprecated.  Use &lt;labcontroller&gt; instead.
+        </a:documentation>
+        <ref name="req"/>
+      </element>
+      <element name="system_type">
+        <a:documentation xml:lang="en">
+          Deprecated.  Use &lt;system&gt;&lt;type&gt; instead.
+        </a:documentation>
+        <ref name="req"/>
+      </element>
+      <element name="memory">
+        <a:documentation xml:lang="en">
+          Deprecated.  Use &lt;system&gt;&lt;memory&gt; instead.
+        </a:documentation>
+        <ref name="req"/>
+      </element>
+      <element name="cpu_count">
+        <a:documentation xml:lang="en">
+          Deprecated.  Use &lt;cpu&gt;&lt;processors&gt; instead.
+        </a:documentation>
+        <ref name="req"/>
+      </element>
+      <element name="numa_node_count">
+        <a:documentation xml:lang="en">
+          Deprecated.  Use &lt;system&gt;&lt;numanodes&gt; instead.
+        </a:documentation>
+        <ref name="req"/>
+      </element>
+      <element name="hostname">
+        <a:documentation xml:lang="en">
+          Deprecated.  Use &lt;system&gt;&lt;name&gt; instead.
+        </a:documentation>
+        <ref name="req"/>
+      </element>
+      <element name="arch">
+        <a:documentation xml:lang="en">
+          Deprecated.  Use &lt;system&gt;&lt;arch&gt; instead.
+        </a:documentation>
+        <ref name="req"/>
+      </element>
+      <element name="auto_prov"><ref name="req"/></element>
+      <element name="hypervisor">
+        <a:documentation xml:lang="en">
+          Deprecated.  Use &lt;system&gt;&lt;hypervisor&gt; instead.
+        </a:documentation>
+        <ref name="req"/>
+      </element>
+      <element name="device">
+        <a:documentation xml:lang="en">
+          Selects systems by device. If operator is ==, selects systems which
+          have at least one matching device. If operator is !=, selects systems
+          which have no matching devices.
+        </a:documentation>
+          <ref name="equality_op" />
+        <oneOrMore>
+          <choice>
+            <attribute name="type" />
+            <attribute name="bus" />
+            <attribute name="driver" />
+            <attribute name="vendor_id" />
+            <attribute name="device_id" />
+            <attribute name="subsys_vendor_id" />
+            <attribute name="subsys_device_id" />
+            <attribute name="description" />
+          </choice>
+        </oneOrMore>
+      </element>
+      <element name="disk">
+        <a:documentation xml:lang="en">
+          Selects systems by disk. A system will match this filter if any of 
+          its disks matches the criteria in this element.
+        </a:documentation>
+        <oneOrMore><ref name="diskreq" /></oneOrMore>
+      </element>
+      <element name="diskspace">
+        <a:documentation xml:lang="en">
+          Selects systems by total disk space.
+        </a:documentation>
+        <ref name="op"/>
+        <ref name="bytes_units"/>
+        <attribute name="value"/>
+      </element>
+      <element name="diskcount">
+        <a:documentation xml:lang="en">
+          Selects systems by total number of disks.
+        </a:documentation>
+        <ref name="op"/>
+        <attribute name="value"/>
+      </element>
+      <element name="group">
+        <a:documentation xml:lang="en">
+          Deprecated.  Use &lt;pool&gt; instead.
+        </a:documentation>
+        <ref name="equality_op" />
+        <attribute name="value" />
+      </element>
+      <element name="pool">
+        <a:documentation xml:lang="en">
+          Select system from a specific pool. If operator is = or ==, select a system which
+          belongs to the specified pool. If the operator is, !=, select a system which does
+          not belong to the pool, != "" will select a system which belongs to any pool.
+        </a:documentation>
+        <ref name="equality_op" />
+        <attribute name="value" />
+      </element>
+      <element name="key_value">
+        <attribute name="key" />
+        <ref name="op"/>
+        <attribute name="value" />
+      </element>
+      <element name="cpu">
+        <a:documentation xml:lang="en">
+          Specify the type of CPU required for this job.
+        </a:documentation>
+        <zeroOrMore><ref name="cpureq"/></zeroOrMore>
+      </element>
+      <element name="system">
+        <a:documentation xml:lang="en">
+          Specify the system required for this task. If you have any
+          specific requirements for the system, you must specify it here.
+        </a:documentation>
+        <zeroOrMore><ref name="systemreq"/></zeroOrMore>
+      </element>
+    </choice>
+  </define>
+  <define name="cpureq">
+   <choice>
+    <element name="and">
+      <zeroOrMore><ref name="cpureq"/></zeroOrMore>
+    </element>
+    <element name="or">
+      <zeroOrMore><ref name="cpureq"/></zeroOrMore>
+    </element>
+    <element name="not">
+      <zeroOrMore><ref name="cpureq"/></zeroOrMore>
+    </element>
+    <element name="cores">
+      <ref name="op" />
+      <attribute name="value" />
+    </element>
+    <element name="family">
+      <ref name="op" />
+      <attribute name="value" />
+    </element>
+    <element name="hyper">
+      <ref name="boolean_value"/>
+    </element>
+    <element name="model">
+      <ref name="op" />
+      <attribute name="value" />
+    </element>
+    <element name="model_name">
+      <ref name="equality_op" />
+      <attribute name="value" />
+    </element>
+    <element name="processors">
+      <ref name="op" />
+      <attribute name="value" />
+    </element>
+    <element name="sockets">
+      <ref name="op" />
+      <attribute name="value" />
+    </element>
+    <element name="speed">
+      <ref name="op" />
+      <attribute name="value" />
+    </element>
+    <element name="stepping">
+      <ref name="op" />
+      <attribute name="value" />
+    </element>
+    <element name="vendor">
+      <ref name="equality_op" />
+      <attribute name="value" />
+    </element>
+    <element name="flag">
+      <ref name="equality_op" />
+      <attribute name="value" />
+    </element>
+   </choice>
+  </define>
+  <define name="diskreq">
+    <choice>
+      <element name="and">
+        <zeroOrMore><ref name="diskreq"/></zeroOrMore>
+      </element>
+      <element name="or">
+        <zeroOrMore><ref name="diskreq"/></zeroOrMore>
+      </element>
+      <element name="not">
+        <zeroOrMore><ref name="diskreq"/></zeroOrMore>
+      </element>
+      <element name="model">
+        <ref name="equality_op" />
+        <attribute name="value" />
+      </element>
+      <element name="size">
+        <a:documentation xml:lang="en">Size of the disk in bytes.</a:documentation>
+        <ref name="op" />
+        <attribute name="value" />
+        <ref name="bytes_units" />
+      </element>
+      <element name="sector_size">
+        <a:documentation xml:lang="en">
+          Logical sector size of the disk in bytes. Modern hard disks with 
+          large sector sizes may emulate a 512-byte sector size in firmware for 
+          compatibility reasons.
+        </a:documentation>
+        <ref name="op" />
+        <attribute name="value" />
+        <ref name="bytes_units" />
+      </element>
+      <element name="phys_sector_size">
+        <a:documentation xml:lang="en">Physical sector size of the disk in bytes.</a:documentation>
+        <ref name="op" />
+        <attribute name="value" />
+        <ref name="bytes_units" />
+      </element>
+    </choice>
+  </define>
+  <define name="systemreq">
+  <choice>
+    <element name="and">
+      <zeroOrMore><ref name="systemreq"/></zeroOrMore>
+    </element>
+    <element name="or">
+      <zeroOrMore><ref name="systemreq"/></zeroOrMore>
+    </element>
+    <element name="not">
+      <zeroOrMore><ref name="systemreq"/></zeroOrMore>
+    </element>
+    <element name="name">
+      <ref name="equality_op" />
+      <attribute name="value" />
+    </element>
+    <element name="lender">
+      <ref name="equality_op" />
+      <attribute name="value" />
+    </element>
+    <element name="model">
+      <ref name="equality_op" />
+      <attribute name="value" />
+    </element>
+    <element name="vendor">
+      <ref name="equality_op" />
+      <attribute name="value" />
+    </element>
+    <element name="added">
+      <ref name="op" />
+      <attribute name="value">
+        <data type="date"/>
+      </attribute>
+    </element>
+    <element name="last_inventoried">
+      <a:documentation xml:lang="en">
+        Date on which the system was last inventoried.
+      </a:documentation>
+      <ref name="op" />
+      <attribute name="value">
+        <a:documentation xml:lang="en">
+          The date should be specified as "YYYY-MM-DD". It can be
+          specified as "" to be used in conjunction with the '=' or
+          '!=' operators - the former matching only uninventoried
+          machines and the latter only inventoried machines.
+         </a:documentation>
+         <choice>
+           <data type="date"/>
+           <value></value>
+         </choice>
+      </attribute>
+    </element>
+    <element name="arch">
+      <ref name="equality_op" />
+      <attribute name="value" />
+    </element>
+    <element name="memory">
+      <ref name="op" />
+      <attribute name="value" />
+    </element>
+    <element name="numanodes">
+      <ref name="op" />
+      <attribute name="value" />
+    </element>
+    <element name="owner">
+      <ref name="equality_op" />
+      <attribute name="value" />
+    </element>
+    <element name="user">
+      <ref name="equality_op" />
+      <attribute name="value" />
+    </element>
+    <element name="loaned">
+      <ref name="equality_op" />
+      <attribute name="value" />
+    </element>
+    <element name="location">
+      <ref name="equality_op" />
+      <attribute name="value" />
+    </element>
+    <element name="powertype">
+      <ref name="equality_op" />
+      <attribute name="value" />
+    </element>
+    <element name="serial">
+      <ref name="equality_op" />
+      <attribute name="value" />
+    </element>
+    <element name="hypervisor">
+      <ref name="equality_op" />
+      <attribute name="value" />
+    </element>
+    <element name="status">
+      <ref name="equality_op" />
+      <attribute name="value" />
+    </element>
+    <element name="type">
+      <ref name="equality_op" />
+      <attribute name="value" />
+    </element>
+   </choice>
+  </define>
+  <define name="req">
+      <ref name="op"/>
+    <attribute name="value" />
+  </define>
+  <define name="op">
+   <optional>
+    <attribute name="op">
+      <choice>
+        <value>!=</value>
+        <value>like</value>
+        <value>==</value>
+        <value>=</value>
+        <value>&lt;=</value>
+        <value>&lt;</value>
+        <value>&gt;=</value>
+        <value>&gt;</value>
+      </choice>
+    </attribute>
+   </optional>
+  </define>
+  <define name="equality_op">
+   <optional>
+    <attribute name="op">
+      <choice>
+        <value>!=</value>
+        <value>like</value>
+        <value>==</value>
+        <value>=</value>
+      </choice>
+    </attribute>
+   </optional>
+  </define>
+  <define name="boolean_value">
+   <attribute name="value">
+    <choice>
+      <data type="boolean"/>
+      <value>TRUE</value>
+      <value>FALSE</value>
+    </choice>
+   </attribute>
+  </define>
+  <define name="bytes_units">
+    <optional>
+      <attribute name="units">
+        <choice>
+          <value>bytes</value>
+          <value>B</value>
+          <value>kB</value>
+          <value>KB</value>
+          <value>KiB</value>
+          <value>MB</value>
+          <value>MiB</value>
+          <value>GB</value>
+          <value>GiB</value>
+          <value>TB</value>
+          <value>TiB</value>
+        </choice>
+      </attribute>
+    </optional>
+  </define>
+  <define name="anyContent">
+    <zeroOrMore>
+      <choice>
+        <ref name="anyElement" />
+        <text />
+      </choice>
+    </zeroOrMore>
+  </define>
+  <define name="anyElement">
+    <element>
+      <anyName />
+      <ref name="anyAttributes" />
+      <ref name="anyContent" />
+    </element>
+  </define>
+  <define name="anyAttributes">
+    <zeroOrMore>
+      <attribute>
+        <anyName />
+      </attribute>
+    </zeroOrMore>
+  </define>
+</grammar>

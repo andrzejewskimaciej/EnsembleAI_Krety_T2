@@ -1,0 +1,22 @@
+{% if recipe %}
+
+{% if distro is osmajor('RedHatEnterpriseLinux3', 'RedHatEnterpriseLinux4', 'RedHatEnterpriseLinuxServer5', 'RedHatEnterpriseLinuxServerGrid5', 'RedHatEnterpriseLinuxClient5') %}
+wget -O /usr/local/sbin/anamon "http://{{ lab_controller.fqdn }}/beaker/anamon"
+wget -O /etc/rc.d/init.d/anamon "http://{{ lab_controller.fqdn }}/beaker/anamon.init"
+{% else %}
+curl -R "http://{{ lab_controller.fqdn }}/beaker/anamon" -o /usr/local/sbin/anamon
+curl -R "http://{{ lab_controller.fqdn }}/beaker/anamon.init" -o /etc/rc.d/init.d/anamon
+{% endif %}
+
+chmod 755 /etc/rc.d/init.d/anamon /usr/local/sbin/anamon
+test -d /selinux && restorecon /etc/rc.d/init.d/anamon /usr/local/sbin/anamon
+
+chkconfig --add anamon
+
+cat << __EOT__ > /etc/sysconfig/anamon
+XMLRPC_URL="http://{{ lab_controller.fqdn }}:8000/RPC2"
+RECIPE_ID="{{ recipe.id }}"
+LOGFILES="/var/log/boot.log /var/log/messages /var/log/dmesg"
+__EOT__
+
+{% endif %}

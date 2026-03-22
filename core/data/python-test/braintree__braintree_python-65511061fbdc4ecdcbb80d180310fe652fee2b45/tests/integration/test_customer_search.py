@@ -1,0 +1,151 @@
+from tests.test_helper import *
+
+class TestCustomerSearch(unittest.TestCase):
+    def test_advanced_search_no_results(self):
+        collection = Transaction.search([
+            TransactionSearch.billing_first_name == "no_such_person"
+        ])
+        self.assertEqual(0, collection.maximum_size)
+
+    def test_advanced_search_finds_duplicate_cards_given_payment_method_token(self):
+        credit_card_dict = {
+            "number": "63049580000009",
+            "expiration_date": "05/2010"
+        }
+
+        jim_dict = {
+            "first_name": "Jim",
+            "credit_card": credit_card_dict
+        }
+
+        joe_dict = {
+            "first_name": "Joe",
+            "credit_card": credit_card_dict
+        }
+
+        jim = Customer.create(jim_dict).customer
+        joe = Customer.create(joe_dict).customer
+
+        collection = Customer.search(
+            CustomerSearch.payment_method_token_with_duplicates == jim.credit_cards[0].token,
+        )
+
+        customer_ids = [customer.id for customer in collection.items]
+        self.assertTrue(jim.id in customer_ids)
+        self.assertTrue(joe.id in customer_ids)
+
+
+    def test_advanced_search_searches_all_text_fields(self):
+        token = "creditcard%s" % random.randint(1, 100000)
+
+        customer = Customer.create({
+            "first_name": "Timmy",
+            "last_name": "O'Toole",
+            "company": "O'Toole and Son(s)",
+            "email": "timmy@example.com",
+            "fax": "3145551234",
+            "phone": "5551231234",
+            "website": "http://example.com",
+            "credit_card": {
+                "cardholder_name": "Tim Toole",
+                "number": "4111111111111111",
+                "expiration_date": "05/2010",
+                "token": token,
+                "billing_address": {
+                    "first_name": "Thomas",
+                    "last_name": "Otool",
+                    "street_address": "1 E Main St",
+                    "extended_address": "Suite 3",
+                    "locality": "Chicago",
+                    "region": "Illinois",
+                    "postal_code": "60622",
+                    "country_name": "United States of America"
+                }
+            }
+        }).customer
+
+        search_criteria = {
+            "first_name": "Timmy",
+            "last_name": "O'Toole",
+            "company": "O'Toole and Son(s)",
+            "email": "timmy@example.com",
+            "phone": "5551231234",
+            "fax": "3145551234",
+            "website": "http://example.com",
+            "address_first_name": "Thomas",
+            "address_last_name": "Otool",
+            "address_street_address": "1 E Main St",
+            "address_postal_code": "60622",
+            "address_extended_address": "Suite 3",
+            "address_locality": "Chicago",
+            "address_region": "Illinois",
+            "address_country_name": "United States of America",
+            "payment_method_token": token,
+            "cardholder_name": "Tim Toole",
+            "credit_card_number": "4111111111111111",
+            "credit_card_expiration_date": "05/2010"
+        }
+
+        criteria = [getattr(CustomerSearch, search_field) == value for search_field, value in search_criteria.items()]
+        criteria.append(CustomerSearch.id == customer.id)
+
+        collection = Customer.search(criteria)
+
+        self.assertEqual(1, collection.maximum_size)
+        self.assertEqual(customer.id, collection.first.id)
+
+        for search_field, value in search_criteria.items():
+            collection = Customer.search(
+                CustomerSearch.id == customer.id,
+                getattr(CustomerSearch, search_field) == value
+            )
+
+            self.assertEqual(1, collection.maximum_size)
+            self.assertEqual(customer.id, collection.first.id)
+
+    def test_advanced_search_range_node_created_at(self):
+        customer = Customer.create().customer
+
+        past = customer.created_at - timedelta(minutes=10)
+        future = customer.created_at + timedelta(minutes=10)
+
+        collection = Customer.search(
+            CustomerSearch.id == customer.id,
+            CustomerSearch.created_at.between(past, future)
+        )
+
+        self.assertEqual(1, collection.maximum_size)
+        self.assertEqual(customer.id, collection.first.id)
+
+        collection = Customer.search(
+            CustomerSearch.id == customer.id,
+            CustomerSearch.created_at <= future
+        )
+
+        self.assertEqual(1, collection.maximum_size)
+        self.assertEqual(customer.id, collection.first.id)
+
+        collection = Customer.search(
+            CustomerSearch.id == customer.id,
+            CustomerSearch.created_at >= past
+        )
+
+        self.assertEqual(1, collection.maximum_size)
+        self.assertEqual(customer.id, collection.first.id)
+
+    def test_search_on_paypal_account_email(self):
+        http = ClientApiHttp.create()
+        status_code, nonce = http.get_paypal_nonce({
+            "consent-code": "consent-code",
+            "options": {"validate": False}
+        })
+        self.assertEqual(202, status_code)
+
+        customer = Customer.create({"payment_method_nonce": nonce}).customer
+
+        collection = Customer.search(
+            CustomerSearch.paypal_account_email == "jane.doe@example.com",
+            CustomerSearch.id == customer.id
+        )
+        self.assertEqual(1, collection.maximum_size)
+        self.assertEqual(customer.id, collection.first.id)

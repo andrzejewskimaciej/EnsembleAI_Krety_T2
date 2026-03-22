@@ -1,0 +1,53 @@
+# --------------------( SYNOPSIS                           )--------------------
+# Paths matching the following glob expressions are *NOT* committed by default.
+#
+# --------------------( SEE ALSO                           )--------------------
+# For further details, see:
+#
+# * "man gitignore" for high-level commentary.
+# * "man 7 glob" for low-level commentary on glob syntax. Note, in particular,
+#   that glob() and hence ".gitignore" files support only a proper subset of
+#   bash- or zsh-style glob syntax.
+
+# ....................{ DIRECTORIES ~ top-level            }....................
+# Ignore the top-level "output" directory.
+/output/
+
+# Ignore all top-level setuptools- and/or PyInstaller-specific directories.
+/build/
+/dist/
+/*.egg-info/
+
+# ....................{ DIRECTORIES ~ general              }....................
+# Ignore all Python-specific cache directories.
+__pycache__/
+
+# Ignore all PyCharm-specific subdirectories.
+.idea/
+
+# Ignore all Rope-specific subdirectories.
+.ropeproject/
+
+# ....................{ FILES ~ top-level                  }....................
+# Ignore all top-level Nose-specific output files.
+/nosetests.xml
+
+# Ignore all top-level setuptools-specific output files.
+/MANIFEST
+
+# Ignore top-level PyInstaller-specific output files *NOT* intended to be
+# modified. ".spec"-suffixed files *ARE* intended to be modified and hence
+# excluded.
+/*.manifest
+
+# ....................{ FILES ~ general                    }....................
+# Ignore all audio and video files.
+*.mp4
+
+# Ignore all Python-specific cache files.
+*.py[cod]
+
+# Ignore all temporary files.
+*~
+*.log
+*.sw?

@@ -1,0 +1,5 @@
+pytest
+pytest_django
+pytest_cov
+junitxml
+lxml

@@ -1,0 +1,4 @@
+{% if remote_post is defined %}
+{% set url = remote_post|shell_quoted %}
+fetch remote_script {{ url }} && chmod +x remote_script && ./remote_script
+{% endif %}

@@ -1,0 +1,151 @@
+"""Testing code for Bio-Registries.
+
+Goals:
+    Make sure that all retrieval is working as expected.
+"""
+import requires_internet
+
+import os
+import sys
+import unittest
+import StringIO
+
+from Bio import db
+
+def run_tests(argv):
+    test_suite = testing_suite()
+    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
+    runner.run(test_suite)
+
+def testing_suite():
+    """Generate the suite of tests.
+    """
+    test_suite = unittest.TestSuite()
+
+    test_loader = unittest.TestLoader()
+    test_loader.testMethodPrefix = 't_'
+    tests = [BaseRetrievalTest]
+    
+    for test in tests:
+        cur_suite = test_loader.loadTestsFromTestCase(test)
+        test_suite.addTest(cur_suite)
+
+    return test_suite
+
+class BaseRetrievalTest(unittest.TestCase):
+    def setUp(self):
+        self.embl_id = "E33091"
+        self.sp_id = "MTHC_DROME"
+        self.gb_protein_id = "NP_058835"
+        self.gb_nuc_id = "NM_017139"
+        self.interpro_id = "IPR000836"
+        self.pdb_id = "1BG2"
+        self.prodoc_id = "PDOC00100"
+        self.prosite_id = "PS00615"
+        self.pubmed_id = "14734308"
+
+    def tearDown(self):
+        pass
+
+    def t_swissprot(self):
+        """Retrieval of Swissprot records from various sources.
+        """
+        sp_db = db["swissprot"]
+        for swissprot_location in sp_db.objs:
+            handle = swissprot_location[self.sp_id]
+            first_line = handle.read(20)
+            assert self.sp_id in first_line, \
+                    (swissprot_location.name, first_line)
+
+    def t_embl(self):
+        """Retrieval of EMBL records from various sources.
+        """
+        embl_db = db["embl"]
+        for embl_location in embl_db.objs:
+            #if embl_location.name.find("xembl") == -1:
+            handle = embl_location[self.embl_id]
+            first_line = handle.read(20)
+            assert self.embl_id in first_line, (embl_location.name, first_line)
+
+    def t_embl_xml(self):
+        """Retrieval of XML EMBL records in BSML format.
+        """
+        embl_db = db["embl-xml"]
+        for embl_location in embl_db.objs:
+            handle = embl_location[self.embl_id]
+            # xml output from xembl
+            first_line = handle.read(400)
+            assert first_line.find("<?xml version") == 0, first_line
+            assert self.embl_id in first_line, (embl_location.name, first_line)
+
+    def t_genbank(self):
+        """Retrieval of GenBank from various sources.
+        """
+        for gb_id, gb_db in \
+                [(self.gb_protein_id, db["genbank-protein"]),
+                 (self.gb_nuc_id, db["genbank-nucleotide"])]:
+            for gb_location in gb_db.objs:
+                handle = gb_location[gb_id]
+                first_line = handle.read(25)
+                assert gb_id in first_line, (gb_location.name, first_line)
+
+    def t_interpro(self):
+        """Retrieval of InterPro data from EBI.
+        """
+        interpro_db = db["interpro"]
+        for interpro_loc in interpro_db.objs:
+            handle = interpro_loc[self.interpro_id]
+            data = handle.read()
+            assert self.interpro_id in data, (interpro_location.name, data)
+
+    def t_pdb(self):
+        """Retrieval of PDB data from various locations.
+        """
+        pdb_db = db["pdb"]
+        for pdb_loc in pdb_db.objs:
+            handle = pdb_loc[self.pdb_id]
+            first_line = handle.read(80)
+            assert self.pdb_id in first_line, (pdb_loc.name, first_line)
+
+    def t_prodoc(self):
+        """Retrieval of Prodoc data from various locations.
+        """
+        prodoc_db = db["prodoc"]
+        for prodoc_loc in prodoc_db.objs:
+            handle = prodoc_loc[self.prodoc_id]
+            first_line = handle.read(20)
+            assert self.prodoc_id in first_line, (prodoc_loc.name, first_line)
+
+    def t_prosite(self):
+        """Retrieval of Prosite data from various locations.
+        """
+        prosite_db = db["prosite"]
+        for prosite_loc in prosite_db.objs:
+            handle = prosite_loc[self.prosite_id]
+            first_part = handle.read(80)
+            assert self.prosite_id in first_part, \
+                    (prosite_loc.name, first_part)
+
+    def t_medline(self):
+        """Retrieval of Medline data from various locations.
+        """
+        medline_db = db["medline"]
+        for medline_loc in medline_db.objs:
+            handle = medline_loc[self.pubmed_id]
+            first_part = handle.read(30)
+            assert self.pubmed_id in first_part, \
+                    (medline_loc.name, first_part)
+
+    def t_fasta(self):
+        """Retrieval of FASTA protein and nucleotide sequences.
+        """
+        fasta_db = db["fasta"]
+        for fasta_loc in fasta_db.objs:
+            for fasta_id in [self.gb_protein_id, self.gb_nuc_id]:
+                handle = fasta_loc[fasta_id]
+                first_part = handle.read(80)
+                assert fasta_id in first_part, \
+                        (fasta_loc.name, fasta_id, first_part)
+
+if __name__ == "__main__":
+    sys.exit(run_tests(sys.argv))

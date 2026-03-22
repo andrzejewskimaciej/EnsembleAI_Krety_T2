@@ -1,0 +1,4 @@
+*.pyc
+build
+prof/
+playhouse/speedups.c

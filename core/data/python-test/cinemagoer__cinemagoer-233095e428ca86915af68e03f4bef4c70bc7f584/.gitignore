@@ -1,0 +1,12 @@
+*.pyc
+*.pyo
+*.egg-info
+*.mo
+*.so
+build/
+__pycache__
+dist/
+.idea
+.cache
+.tox
+.coverage

@@ -1,0 +1,29 @@
+#!/usr/bin/python
+
+import sys, os
+import xmlrpclib
+from datetime import datetime
+from datetime import timedelta
+from cobbler import utils
+
+if __name__ == '__main__':
+    cobbler = xmlrpclib.ServerProxy('http://127.0.0.1/cobbler_api')
+    token = cobbler.login("", utils.get_shared_secret())
+    settings = cobbler.get_settings(token)
+    inventory = xmlrpclib.ServerProxy('%s/RPC2' % settings['redhat_management_server'], allow_none=True)
+    distros = cobbler.get_distros()
+    rdistros = []
+    for distro in distros:
+        if not os.path.exists(distro['kernel']):
+            rdistros.append(distro['name'])
+        elif len(sys.argv) > 1 and distro['name'].find(sys.argv[1]) != -1:
+            rdistros.append(distro['name'])
+    # if all distros are expired then something is probably wrong.
+    if len(distros) != len(rdistros):
+        for distro in rdistros:
+            print "Removing distro %s" % distro
+            cobbler.remove_distro(distro, token, True)
+        inventory.labcontrollers.removeDistros(settings['server'], rdistros)
+    else:
+        print "All distros are missing! Please check nfs mounts"
+        sys.exit(1)

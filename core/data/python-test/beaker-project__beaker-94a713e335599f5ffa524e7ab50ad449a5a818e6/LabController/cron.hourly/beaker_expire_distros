@@ -1,0 +1,2 @@
+#!/bin/sh
+exec flock -n /var/run/beaker_expire_distros.cron.lock beaker-expire-distros

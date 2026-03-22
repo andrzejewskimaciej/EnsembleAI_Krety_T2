@@ -1,0 +1,29 @@
+from setuptools import setup, find_packages
+setup(
+    name = "bkr.labcontroller",
+    version = "@VERSION@",
+
+    packages=find_packages('src'),
+    package_dir = {'':'src'},
+
+    namespace_packages = ['bkr'],
+
+    data_files = [('/etc/beaker/', ['proxy.conf']),
+                  ('/etc/init.d', ['init.d/beaker-proxy',
+                                   'init.d/beaker-watchdog'])],
+    package_data = {
+        'bkr.labcontroller': [
+            'default.conf',
+        ],
+        '/etc/beaker': ['proxy.conf'],
+        '/etc/init.d': ['init.d/beaker-proxy',
+                        'init.d/beaker-watchdog'],
+    },
+
+    entry_points = {
+        'console_scripts': (
+            'beaker-proxy    = bkr.labcontroller.main:main',
+            'beaker-watchdog = bkr.labcontroller.watchdog:main',
+        ),
+    }
+)

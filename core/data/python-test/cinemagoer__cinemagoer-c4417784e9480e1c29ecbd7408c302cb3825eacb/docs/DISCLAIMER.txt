@@ -1,0 +1,33 @@
+  DISCLAIMERS
+  ===========
+
+  IMDb
+  ====
+
+IMDb is a trademark of Internet Movie Database Inc. and all contents
+and data included on the IMDb's site is the property of IMDb or its
+content suppliers and protected by United States and international
+copyright laws.
+
+If you use the IMDb web site, you have to accept the conditions
+listed here: http://www.imdb.com/help/show_article?conditions
+
+If you use alternate interfaces (see http://www.imdb.com/interfaces.html)
+to the IMDb's data, you have to accept the specific policy and conditions.
+
+Read also http://www.imdb.com/help/show_leaf?usedatasoftware
+
+
+  IMDbPY
+  ======
+
+IMDbPY (and the author) is not affiliated with Internet Movie Database Inc.
+
+You're NOT allowed to use IMDbPY as a base to develop robots or crawlers.
+Also, you CAN'T grant public access to the IMDb's data, processed/managed
+by IMDbPY, if not otherwise stated by the IMDb's policy; you MUST use
+IMDbPY for your own personal and non-commercial use.
+
+Remember that you always have to accept the above mentioned conditions.
+
+

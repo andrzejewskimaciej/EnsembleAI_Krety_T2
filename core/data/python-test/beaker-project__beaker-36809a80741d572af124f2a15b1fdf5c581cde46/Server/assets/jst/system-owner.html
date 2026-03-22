@@ -1,0 +1,24 @@
+<p>
+  The system is owned by <%= owner.toHTML() %>.
+  <% if (can_change_owner) { %>
+    <button type="button" class="btn change"><i class="fa fa-pencil-square-o"></i> Change</button>
+  <% } %>
+</p>
+<p>
+  Notifications sent to the owner will be copied to these addresses:
+</p>
+<div>
+  <% if (_.isEmpty(notify_cc)) { %>
+    (none)
+  <% } %>
+  <ul class="list-group system-notify-cc">
+    <% _.each(notify_cc, function (cc_email) { %>
+      <li>
+        <%- cc_email %>
+        <% if (can_change_notify_cc) { %>
+          <button type="button" class="btn cc-remove" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Removing&hellip;" data-cc="<%- cc_email %>"><i class="fa fa-times"></i> Remove</button>
+        <% } %>
+      </li>
+    <% }) %>
+  </ul>
+</div>

@@ -1,0 +1,140 @@
+set -x
+{% snippet 'fetch_wrapper' %}
+
+{% snippet 'install_done' %}
+{% snippet 'clear_netboot' %}
+{% if recipe %}
+echo {{ recipe.id }} > /root/RECIPE.TXT
+{% endif %}
+
+# If netboot_method= is found in /proc/cmdline record it to /root
+netboot_method=$(perl -n -e'/netboot_method=([^\s]+)/ && print $1' /proc/cmdline)
+if [ -n "$netboot_method" ]; then
+echo $netboot_method >/root/NETBOOT_METHOD.TXT
+fi
+
+# Enable post-install boot notification
+{% snippet 'post_anamon' %}
+{% if no_disable_readahead is undefined %}
+if [ -f /etc/sysconfig/readahead ] ; then
+    :
+{% snippet 'readahead_sysconfig' %}
+fi
+{% if has_systemd is defined %}
+systemctl disable systemd-readahead-collect
+{% endif %}
+{% endif %}
+{% snippet 'linkdelay' %}
+
+{# We normally want to make sure the system time is accurate, in case 
+ # a previous recipe has munged it. But if users want to opt out of this 
+ # behaviour they can set 'no_clock_sync'.
+ #}
+{% if no_clock_sync is undefined %}
+if [ -e /etc/sysconfig/ntpdate ] ; then
+{% if has_systemd is defined %}
+    systemctl enable ntpdate
+{% else %}
+    chkconfig ntpdate on
+{% endif %}
+fi
+if [ -e "/etc/sysconfig/ntpd" ]; then
+{% if has_systemd is defined %}
+    systemctl enable ntpd
+{% else %}
+    chkconfig ntpd on
+{% endif %}
+    GOT_G=$(/bin/cat /etc/sysconfig/ntpd | grep -E '^OPTIONS' | grep '\-g')
+
+    if [ -z "$GOT_G" ]; then
+        /bin/sed -i -r 's/(^OPTIONS\s*=\s*)(['\''|"])(.+)$/\1\2\-x \3 /' /etc/sysconfig/ntpd
+    fi
+fi
+if [ -e /etc/chrony.conf ] ; then
+    cp /etc/chrony.conf{,.orig}
+    # use only DHCP-provided time servers, no default pool servers
+    sed -i '/^server /d' /etc/chrony.conf
+    cp /etc/sysconfig/network{,.orig}
+    # setting iburst should speed up initial sync
+    # https://bugzilla.redhat.com/show_bug.cgi?id=787042#c12
+    echo NTPSERVERARGS=iburst >>/etc/sysconfig/network
+{% if has_systemd is defined %}
+    systemctl disable ntpd
+    systemctl disable ntpdate
+    systemctl enable chronyd
+    systemctl enable chrony-wait
+{% else %}
+    chkconfig ntpd off
+    chkconfig ntpdate off
+    chkconfig chronyd on
+{% endif %}
+fi
+{% endif %}
+
+{% snippet 'grubport' %}
+{% snippet 'boot_order' %}
+
+{% if yum %}
+# Install Yum
+pushd /root
+fetch {{ yum }} http://{{ lab_controller.fqdn }}/beaker/{{ yum }}
+/bin/rpm -Uvh {{ yum }}
+popd
+{% endif %}
+
+{% if taskrepo and contained_harness is not defined and has_rpmostree is not defined %}
+#Add Task Repo
+{% snippet 'taskrepo' %}
+{% endif %}
+
+
+{% if harnessrepo and contained_harness is not defined and has_rpmostree is not defined %}
+# Add Harness Repo
+{% set reponame, repourl = harnessrepo.split(',', 1) %}
+cat <<"EOF" >/etc/yum.repos.d/{{ reponame }}.repo
+[{{ reponame }}]
+name={{ reponame }}
+baseurl={{ repourl }}
+enabled=1
+gpgcheck=0
+EOF
+{% endif %}
+
+# Add distro and custom Repos
+{{ snippet('print_repos') }}
+
+{% if recipe %}
+{% if contained_harness is defined or has_rpmostree is defined%}
+{% snippet 'docker_harness' %}
+{% else %}
+# fill the yum cache and redirect output to /dev/null
+# This speeds up yum because of a bug where it will update stdout too often.
+# http://lists.baseurl.org/pipermail/yum-devel/2011-December/008857.html
+yum check-update > /dev/null 2>&1 || true
+{% if harness|default('beah') == 'beah' %}
+{% snippet 'beah' %}
+{% else %}
+{% snippet 'harness' %}
+{% endif %}
+{% endif %}
+{% endif %}
+
+#Add test user account
+useradd --password '$6$oIW3o2Mr$XbWZKaM7nA.cQqudfDJScupXOia5h1u517t6Htx/Q/MgXm82Pc/OcytatTeI4ULNWOMJzvpCigWiL4xKP9PX4.' test
+{% snippet 'beaker_env' %}
+{% snippet 'lab_env' %}
+{% snippet 'ssh_keys' %}
+{% if recipe.systemtype == 'Virtual' %}
+if [ -d /etc/init ] ; then
+    :
+{% snippet 'virt_console_post' %}
+fi
+{% endif %}
+{% if system and system.kernel_type.kernel_type == 'highbank' %}
+{% snippet 'highbank' %}
+{% endif %}
+{% if system and system.kernel_type.kernel_type == 'mvebu' %}
+{% snippet 'mvebu' %}
+{% endif %}
+{% snippet 'remote_post' %}
+{% snippet 'disable_rhts_compat' %}

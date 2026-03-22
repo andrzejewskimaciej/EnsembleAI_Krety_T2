@@ -1,0 +1,10 @@
+from setuptools import setup, find_packages
+
+setup(
+    name = "bkr",
+    version = "@VERSION@",
+
+    packages=find_packages('.'),
+    package_dir = {'':'.'},
+    package_data={'': ['schema/*.rng', 'schema/*.ttl']},
+)

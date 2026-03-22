@@ -1,0 +1,4 @@
+[globalconfig]
+default_builder = beakertito.BeakerBuilder
+default_tagger = beakertito.BeakerVersionTagger
+lib_dir = rel-eng/lib

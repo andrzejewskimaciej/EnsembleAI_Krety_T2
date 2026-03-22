@@ -1,0 +1,722 @@
+test_SeqIO
+Testing reading clustal format file Clustalw/cw02.aln
+ ID = 'gi|4959044|gb|AAD34209.1|AF069', Name='<unknown name>',
+ Seq='MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSE...GNRESVV', length=601
+ ID = 'gi|671626|emb|CAA85685.1|', Name='<unknown name>',
+ Seq='---------MSPQTETKASVGFKAGVKEYKLTYYTPEYET...PAMD---', length=601
+Testing reading clustal format file Clustalw/cw02.aln as an alignment
+ M- alignment column 0
+ E- alignment column 1
+ N- alignment column 2
+ S- alignment column 3
+ D- alignment column 4
+ || ...
+ V- alignment column 600
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading clustal format file Clustalw/opuntia.aln
+ ID = 'gi|6273285|gb|AF191659.1|AF191', Name='<unknown name>',
+ Seq='TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCG...TACCAGA', length=156
+ ID = 'gi|6273284|gb|AF191658.1|AF191', Name='<unknown name>',
+ Seq='TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCG...TACCAGA', length=156
+ ID = 'gi|6273287|gb|AF191661.1|AF191', Name='<unknown name>',
+ Seq='TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCG...TACCAGA', length=156
+ ...
+ ID = 'gi|6273291|gb|AF191665.1|AF191', Name='<unknown name>',
+ Seq='TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCG...TACCAGA', length=156
+Testing reading clustal format file Clustalw/opuntia.aln as an alignment
+ TTTTTTT alignment column 0
+ AAAAAAA alignment column 1
+ TTTTTTT alignment column 2
+ AAAAAAA alignment column 3
+ CCCCCCC alignment column 4
+ ||||||| ...
+ AAAAAAA alignment column 155
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading fasta format file Nucleic/lupine.nu
+ ID and Name='gi|5049839|gb|AI730987.1|AI730987',
+ Seq='GAAAATTCATTTTCTTTGGACTTTCTCTGAAATCCGAGTC...GGTTTTT', length=655
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading fasta format file Nucleic/elderberry.nu
+ ID and Name='gi|4218935|gb|AF074388.1|AF074388',
+ Seq='ATGAAGTTAAGCACTCTTCTCATCTTATCTTTTCCTTTCC...GTCGTTT', length=2050
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading fasta format file Nucleic/phlox.nu
+ ID and Name='gi|5052071|gb|AF067555.1|AF067555',
+ Seq='TCGAAACCTGCCTAGCAGAACGACCCGCGAACTTGTATTC...CACGACC', length=623
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading fasta format file Nucleic/centaurea.nu
+ ID and Name='gi|4104054|gb|AH007193.1|SEG_CVIGS',
+ Seq='CCTGTCACTTAACTTTTTGTTCATAAGGTATATATGGGGG...GTTAGAG', length=1002
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading fasta format file Nucleic/wisteria.nu
+ ID and Name='gi|5817701|gb|AF142731.1|AF142731',
+ Seq='GCTCCATTTTTTACACATTTCTATGAACTAATTGGTTCAT...ATGATGA', length=2551
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading fasta format file Nucleic/sweetpea.nu
+ ID and Name='gi|3176602|gb|U78617.1|LOU78617',
+ Seq='CAGGCTGCGCGGTTTCTATTTATGAAGAACAAGGTCCGTA...GTTTGTT', length=309
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading fasta format file Nucleic/lavender.nu
+ ID and Name='gi|5690369|gb|AF158246.1|AF158246',
+ Seq='GGCTCTTAAGTCATGTCTAGGCAGGTGTGCACAAGTTTAG...GTAGGTG', length=550
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading fasta format file Amino/aster.pro
+ ID and Name='gi|3298468|dbj|BAA31520.1|',
+ Seq='GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLL...FIVGANI', length=107
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading fasta format file Amino/loveliesbleeding.pro
+ ID and Name='gi|2781234|pdb|1JLY|B',
+ Seq='XAGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKIL...IELGQNN', length=304
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading fasta format file Amino/rose.pro
+ ID and Name='gi|4959044|gb|AAD34209.1|AF069992_1',
+ Seq='MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSE...GNRESVV', length=600
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading fasta format file Amino/rosemary.pro
+ ID and Name='gi|671626|emb|CAA85685.1|',
+ Seq='MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAF...FEFPAMD', length=473
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading fasta format file Fasta/f001
+ ID and Name='gi|3318709|pdb|1A91|',
+ Seq='MENLNMDLLYMAAAVMMGLAAIGAAIGIGILGGKFLEGAA...YVMFAVA', length=79
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading fasta format file Fasta/f002
+ ID and Name='gi|1348912|gb|G26680|G26680',
+ Seq='CGGACCAGACGGACACAGGGAGAAGCTAGTTTCTTTCATG...GGTTTNA', length=633
+ ID and Name='gi|1348917|gb|G26685|G26685',
+ Seq='CGGAGCCAGCGAGCATATGCTGCATGAGGACCTTTCTATC...NNNGAAA', length=413
+ ID and Name='gi|1592936|gb|G29385|G29385',
+ Seq='GATCAAATCTGCACTGTGTCTACATATAGGAAAGGTCCTG...NTTTTTT', length=471
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'phylip' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'stockholm' format
+ Failed: Sequences must all be the same length
+Testing reading fasta format file Fasta/fa01
+ ID and Name='AK1H_ECOLI/1-378',
+ Seq='CPDSINAALICRGEKMSIAIMAGVLEARGH-N--VTVIDP...INIVAIA', length=378
+ ID and Name='AKH_HAEIN/1-382',
+ Seq='-----------------VEDAVKATIDCRGEKLSIAMMKA...SALAQAN', length=382
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'phylip' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'stockholm' format
+ Failed: Sequences must all be the same length
+Testing reading fasta format file GFF/NC_001802.fna
+ ID and Name='gi|9629357|ref|NC_001802.1|',
+ Seq='GGTCTCTCTGGTTAGACCAGATCTGAGCCTGGGAGCTCTC...GTGCTTC', length=9181
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading fasta format file GFF/NC_001802lc.fna
+ ID and Name='gi|9629357|ref|nc_001802.1|',
+ Seq='ggtctctctggttagaccagatctgagcctgggagctctc...gtgcttc', length=9181
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading fasta format file GFF/multi.fna
+ ID and Name='test1',
+ Seq='ACGTCGCG', length=8
+ ID and Name='test2',
+ Seq='GGGGCCCC', length=8
+ ID and Name='test3',
+ Seq='AAACACAC', length=8
+Testing reading fasta format file GFF/multi.fna as an alignment
+ AGA alignment column 0
+ CGA alignment column 1
+ GGA alignment column 2
+ TGC alignment column 3
+ CCA alignment column 4
+ ||| ...
+ GCC alignment column 7
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading fasta format file Registry/seqs.fasta
+ ID and Name='gi|1348916|gb|G26684|G26684',
+ Seq='GATCCCTACCCTTNCCGTTGGTCTCTNTCGCTGACTCGAG...TTATTTC', length=285
+ ID and Name='gi|129628|sp|P07175|PARA_AGRTU',
+ Seq='MPVVVVASSKGGAGKSTTAVVLGTELAHKGVPVTMLDCDP...KLTEALR', length=222
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'phylip' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'stockholm' format
+ Failed: Sequences must all be the same length
+Testing reading nexus format file Nexus/test_Nexus_input.nex
+ ID and Name='t1',
+ Seq='A-C-G-Tc-gtgtgtgctct-t-t------ac-gtgtgtgctct-t-t', length=48
+ ID and Name='t2 the name',
+ Seq='A-C-GcTc-gtg-----tct-t-t----acac-gtg-----tct-t-t', length=48
+ ID and Name='isn'that [a] strange name?',
+ Seq='A-CcGcTc-gtgtgtgct--------acacac-gtgtgtgct------', length=48
+ ...
+ ID and Name='t9',
+ Seq='cccccccc-cccccccccccNc-ccccccccc-cccccccccccNc-c', length=48
+Testing reading nexus format file Nexus/test_Nexus_input.nex as an alignment
+ AAAAAAAAc alignment column 0
+ -----c?tc alignment column 1
+ CCCCCCCCc alignment column 2
+ --c-?a-tc alignment column 3
+ GGGGGGGGc alignment column 4
+ ||||||||| ...
+ tt--?ag?c alignment column 47
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading swiss format file SwissProt/sp001
+ ID = 'Q13454', Name='N33_HUMAN',
+ Seq='MGARGAPSRRRQAGRRLRYLPTGSFPFLLLLLLLCIQLGG...YSDLDFE', length=348
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading swiss format file SwissProt/sp002
+ ID = 'P54101', Name='CSP_MOUSE',
+ Seq='MADQRQRSLSTSGESLYHVLGLDKNATSDDIKKSYRKLAL...YHTDGFN', length=198
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading swiss format file SwissProt/sp003
+ ID = 'P42655', Name='143E_HUMAN',
+ Seq='MDDREDLVYQAKLAEQAERYDEMVESMKKVAGMDVELTVE...DVEDENQ', length=255
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading swiss format file SwissProt/sp004
+ ID = 'P23082', Name='NDOA_PSEPU',
+ Seq='TVKWIEAVALSDILEGDVLGVTVEGKELALYEVEGEIYAT...RVMIDLS', length=103
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading swiss format file SwissProt/sp005
+ ID = 'P24973', Name='NU3M_BALPH',
+ Seq='MNLLLTLLTNTTLALLLVFIAFWLPQLNVYAEKTSPYECG...EGLEWAE', length=115
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading swiss format file SwissProt/sp006
+ ID = 'P39896', Name='TCMO_STRGA',
+ Seq='MTPHTHVRGPGDILQLTMAFYGSRALISAVELDLFTLLAG...AIGRKPR', length=339
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading swiss format file SwissProt/sp007
+ ID = 'O95832', Name='CLD1_HUMAN',
+ Seq='MANAGLQLLGFILAFLGWIGAIVSTALPQWRIYSYAGDNI...SSGKDYV', length=211
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading swiss format file SwissProt/sp008
+ ID = 'P01892', Name='1A02_HUMAN',
+ Seq='MAVMAPRTLVLLLSGALALTQTWAGSHSMRYFFTSVSRPG...SLTACKV', length=365
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading swiss format file SwissProt/sp009
+ ID = 'O23729', Name='CHS3_BROFI',
+ Seq='MAPAMEEIRQAQRAEGPAAVLAIGTSTPPNALYQADYPDY...VPIAGAE', length=394
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading swiss format file SwissProt/sp010
+ ID = 'Q13639', Name='5H4_HUMAN',
+ Seq='MDKLDANVSSEEGFGSVEKVVLLTFLSTVILMAILGNLLV...AAQPSDT', length=388
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading swiss format file SwissProt/sp011
+ ID = 'P16235', Name='LSHR_RAT',
+ Seq='MGRRVPALRQLLVLAVLLLKPSQLQSRELSGSRCPEPCDC...PPRALTH', length=700
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading swiss format file SwissProt/sp012
+ ID and Name='Q9Y736',
+ Seq='MQIFVKTLTGKTITLEVESSDTIDNVKTKIQDKEGIPPDQ...LRLRGGN', length=153
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading swiss format file SwissProt/sp013
+ ID and Name='P82909',
+ Seq='MGSKMASASRVVQVVKPHTPLIRFPDRRDNPKPNVSEALR...IQRGGPE', length=102
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading swiss format file SwissProt/sp014
+ ID = 'P12166', Name='PSBL_ORYSA',
+ Seq='TQSNPNEQNVELNRTSLYWGLLLIFVLAVLFSNYFFN', length=37
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading swiss format file SwissProt/sp015
+ ID = 'IPI00383150', Name='IPI00383150.2',
+ Seq='MSFQAPRRLLELAGQSLLRDQALAISVLDELPRELFPRLF...FIGPTPC', length=457
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading swiss format file SwissProt/sp016
+ ID = 'P01100', Name='FOS_HUMAN',
+ Seq='MMFSGFNADYEASSSRCSSASPAGDSLSYYHSPADSFSSM...SPTLLAL', length=380
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading swiss format file Registry/EDD_RAT.dat
+ ID = 'Q62671', Name='EDD_RAT',
+ Seq='ARRERMTAREEASLRTLEGRRRATLLSARQGMMSARGDFL...TKNFGFV', length=920
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading genbank format file GenBank/noref.gb
+ ID = 'NM_006141.1', Name='NM_006141',
+ Seq='GGCAAGATGGCGCCGGTGGGGGTGGAGAAGAAGCTGCTGC...AAAAAAA', length=1622
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading genbank format file GenBank/cor6_6.gb
+ ID = 'X55053.1', Name='ATCOR66M',
+ Seq='AACAAAACACACATCAAAAACGATTTTACAAGAAAAAAAT...AAAAAAA', length=513
+ ID = 'X62281.1', Name='ATKIN2',
+ Seq='ATTTGGCCTATAAATATAAACCCTTAAGCCCACATATCTT...AATTATA', length=880
+ ID = 'M81224.1', Name='BNAKINI',
+ Seq='AAAAAAACACAACAAAACTCAATAAATAAACAAATGGCAG...AAGCTTC', length=441
+ ...
+ ID = 'AF297471.1', Name='AF297471',
+ Seq='ATGGCAGACAACAAGCAGAGCTTCCAAGCCGGTCAAGCCG...CAAGTAG', length=497
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'phylip' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'stockholm' format
+ Failed: Sequences must all be the same length
+Testing reading genbank format file GenBank/iro.gb
+ ID = 'AL109817.1', Name='IRO125195',
+ Seq='CACAGGCCCAGAGCCACTCCTGCCTACAGGTTCTGAGGGC...AAAAAAA', length=1326
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading genbank format file GenBank/pri1.gb
+ ID = 'U05344.1', Name='HUGLUT1',
+ Seq='GATCATGCATGCACTCCAGCCTGGGACAAGAGCGAAACTC...GTTTGCA', length=741
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading genbank format file GenBank/arab1.gb
+ ID = 'AC007323.5', Name='AC007323',
+ Seq='AAGCTTTGCTACGATCTACATTTGGGAATGTGAGTCTCTT...GAAGCTT', length=86436
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading genbank format file GenBank/protein_refseq.gb
+ ID = 'NP_034640.1', Name='NP_034640',
+ Seq='MNNRWILHAAFLLCFSTTALSINYKQLQLQERTNIRKCQE...LTRNFQN', length=182
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading genbank format file GenBank/protein_refseq2.gb
+ ID = 'NP_034640.1', Name='NP_034640',
+ Seq='MNNRWILHAAFLLCFSTTALSINYKQLQLQERTNIRKCQE...LTRNFQN', length=182
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading genbank format file GenBank/extra_keywords.gb
+ ID = 'AL138972.1', Name='DMBR25B3',
+ Seq='TCCAGGGGATTCACGCGCAATATGTTTCCCTCGCTCGTCT...TCGATTG', length=154329
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading genbank format file GenBank/one_of.gb
+ ID = 'U18266.1', Name='HSTMPO1',
+ Seq='GAATTCAGATAGAATGTAGACAAGAGGGATGGTGAGGAAA...CAAAGGC', length=2509
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading genbank format file GenBank/NT_019265.gb
+ ID = 'NT_019265.6', Name='NT_019265',
+ Seq='', length=0
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Failed: Non-empty sequences are required
+ Checking can write/read as 'phylip' format
+ Failed: Non-empty sequences are required
+ Checking can write/read as 'stockholm' format
+ Failed: Non-empty sequences are required
+Testing reading genbank format file GenBank/origin_line.gb
+ ID = 'NC_002678.1', Name='NC_002678',
+ Seq='TTAATTAACTGTCTTCGATTGCGTTTAATTGACGGTTTTC...TCAGCGC', length=180
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading genbank format file GenBank/blank_seq.gb
+ ID = 'NP_001832.1', Name='NP_001832',
+ Seq='MEECWVTEIANGSKDGLDSNPMKDYMILSGPQKTAVAVLC...DLDLSDC', length=360
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading genbank format file GenBank/dbsource_wrap.gb
+ ID = 'P01485', Name='SCX3_BUTOC',
+ Seq='VKDGYIVDDRNCTYFCGRNAYCNEECTKLKGESGYCQWAS...KGPGRCN', length=64
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading genbank format file GenBank/gbvrl1_start.seq
+ ID = 'AB000048.1', Name='AB000048',
+ Seq='ATGTCTGGCAACCAGTATACTGAGGAAGTTATGGAGGGAG...GGATTAA', length=2007
+ ID = 'AB000049.1', Name='AB000049',
+ Seq='ATGTCTGGCAACCAGTATACTGAGGAAGTTATGGAGGGAG...GGATTAA', length=2007
+ ID = 'AB000050.1', Name='AB000050',
+ Seq='ATGAGTGATGGAGCAGTTCAACCAGACGGTGGTCAACCTG...ATATTAA', length=1755
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'phylip' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'stockholm' format
+ Failed: Sequences must all be the same length
+Testing reading genbank format file GFF/NC_001422.gbk
+ ID = 'NC_001422.1', Name='NC_001422',
+ Seq='GAGTTTTATCGCTTCCATGACGCAGAAGTTAACACTTTCG...ACCTGCA', length=5386
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading embl format file EMBL/TRBG361.embl
+ ID = 'X56734.1', Name='X56734',
+ Seq='AAACAAACCAAATATGGATTTTATTGTAGCCATATTTGCT...AAAAAAA', length=1859
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading embl format file EMBL/DD231055_edited.embl
+ ID = 'DD231055.1', Name='DD231055',
+ Seq='GCCGAGCTGACCCAGTCTCCATCCTCCCTGTCTGCATCTG...TATGAGA', length=315
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading embl format file EMBL/SC10H5.embl
+ ID = 'AL031232', Name='SC10H5',
+ Seq='GATCAGTAGACCCAGCGACAGCAGGGCGGGGCCCAGCAGG...CGAGCAT', length=4870
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading embl format file EMBL/U87107.embl
+ ID = 'U87107.1', Name='U87107',
+ Seq='CAATTACTGCAATGCCCTCGTAATTAAGTGAATTTACAAT...CATCACC', length=8840
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading stockholm format file Stockholm/simple.sth
+ ID and Name='AP001509.1',
+ Seq='UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAU...UUAAUGU', length=104
+ ID and Name='AE007476.1',
+ Seq='AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-U...GUGAGAU', length=104
+Testing reading stockholm format file Stockholm/simple.sth as an alignment
+ UA alignment column 0
+ UA alignment column 1
+ AA alignment column 2
+ AA alignment column 3
+ UU alignment column 4
+ || ...
+ UU alignment column 103
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading stockholm format file Stockholm/funny.sth
+ ID = 'O83071/192-246', Name='O83071',
+ Seq='MTCRAQLIAVPRASSLAE--AIACAQKM----RVSRVPVYERS', length=43
+ ID = 'O83071/259-312', Name='O83071',
+ Seq='MQHVSAPVFVFECTRLAY--VQHKLRAH----SRAVAIVLDEY', length=43
+ ID = 'O31698/18-71', Name='O31698',
+ Seq='MIEADKVAHVQVGNNLEH--ALLVLTKT----GYTAIPVLDPS', length=43
+ ...
+ ID = 'O31699/88-139', Name='O31699',
+ Seq='EVMLTDIPRLHINDPIMK--GFGMVINN------GFVCVENDE', length=43
+Testing reading stockholm format file Stockholm/funny.sth as an alignment
+ MMMEE alignment column 0
+ TQIVV alignment column 1
+ CHEMM alignment column 2
+ RVALL alignment column 3
+ ASDTT alignment column 4
+ ||||| ...
+ SYSEE alignment column 42
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading phylip format file Phylip/reference_dna.phy
+ ID and Name='Archaeopt',
+ Seq='CGATGCTTACCGC', length=13
+ ID and Name='Hesperorni',
+ Seq='CGTTACTCGTTGT', length=13
+ ID and Name='Baluchithe',
+ Seq='TAATGTTAATTGT', length=13
+ ...
+ ID and Name='B.subtilis',
+ Seq='GGCAGCCAATCAC', length=13
+Testing reading phylip format file Phylip/reference_dna.phy as an alignment
+ CCTTCG alignment column 0
+ GGAAAG alignment column 1
+ ATAAAC alignment column 2
+ TTTTAA alignment column 3
+ GAGGAG alignment column 4
+ |||||| ...
+ CTTTTC alignment column 12
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading phylip format file Phylip/reference_dna2.phy
+ ID and Name='Archaeopt',
+ Seq='CGATGCTTACCGCCGATGCTTACCGCCGATGCTTACCGC', length=39
+ ID and Name='Hesperorni',
+ Seq='CGTTACTCGTTGTCGTTACTCGTTGTCGTTACTCGTTGT', length=39
+ ID and Name='Baluchithe',
+ Seq='TAATGTTAATTGTTAATGTTAATTGTTAATGTTAATTGT', length=39
+ ...
+ ID and Name='B.subtilis',
+ Seq='GGCAGCCAATCACGGCAGCCAATCACGGCAGCCAATCAC', length=39
+Testing reading phylip format file Phylip/reference_dna2.phy as an alignment
+ CCTTCG alignment column 0
+ GGAAAG alignment column 1
+ ATAAAC alignment column 2
+ TTTTAA alignment column 3
+ GAGGAG alignment column 4
+ |||||| ...
+ CTTTTC alignment column 38
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading phylip format file Phylip/hennigian.phy
+ ID and Name='A',
+ Seq='CACACACAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAA', length=40
+ ID and Name='B',
+ Seq='CACACAACAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAA', length=40
+ ID and Name='C',
+ Seq='CACAACAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAA', length=40
+ ...
+ ID and Name='J',
+ Seq='ACAAAAAAAAACAAAAACACAAAAAAAAAAAAAAAAAAAA', length=40
+Testing reading phylip format file Phylip/hennigian.phy as an alignment
+ CCCCCAAAAA alignment column 0
+ AAAAACCCCC alignment column 1
+ CCCAAAAAAA alignment column 2
+ AAACCAAAAA alignment column 3
+ CCAAAAAAAA alignment column 4
+ |||||||||| ...
+ AAAAAAAAAA alignment column 39
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading phylip format file Phylip/horses.phy
+ ID and Name='Mesohippus',
+ Seq='AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', length=40
+ ID and Name='Hypohippus',
+ Seq='AAACCCCCCCAAAAAAAAACAAAAAAAAAAAAAAAAAAAA', length=40
+ ID and Name='Archaeohip',
+ Seq='CAAAAAAAAAAAAAAAACACAAAAAAAAAAAAAAAAAAAA', length=40
+ ...
+ ID and Name='Pliohippus',
+ Seq='CCCACCCCCCCCCACACCCCAAAAAAAAAAAAAAAAAAAA', length=40
+Testing reading phylip format file Phylip/horses.phy as an alignment
+ AACCCCCCCC alignment column 0
+ AAAACCCCCC alignment column 1
+ AAAAAAAAAC alignment column 2
+ ACAAAAAAAA alignment column 3
+ ACACCCCCCC alignment column 4
+ |||||||||| ...
+ AAAAAAAAAA alignment column 39
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading phylip format file Phylip/random.phy
+ ID and Name='A',
+ Seq='CACACAACCAAACAAACCACAAAAAAAAAAAAAAAAAAAA', length=40
+ ID and Name='B',
+ Seq='AAACCACACACACAAACCCAAAAAAAAAAAAAAAAAAAAA', length=40
+ ID and Name='C',
+ Seq='ACAAAACCAAACCACCCACAAAAAAAAAAAAAAAAAAAAA', length=40
+ ...
+ ID and Name='J',
+ Seq='CCAAAAACACCCAACCCAACAAAAAAAAAAAAAAAAAAAA', length=40
+Testing reading phylip format file Phylip/random.phy as an alignment
+ CAAAACAAAC alignment column 0
+ AACAACCACC alignment column 1
+ CAAAACAAAA alignment column 2
+ ACAACACACA alignment column 3
+ CCAAAACCAA alignment column 4
+ |||||||||| ...
+ AAAAAAAAAA alignment column 39
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading phylip format file Phylip/interlaced.phy
+ ID and Name='CYS1_DICDI',
+ Seq='-----MKVILLFVLAVFTVFVSS---------------RG...STSII--', length=384
+ ID and Name='ALEU_HORVU',
+ Seq='MAHARVLLLALAVLATAAVAVASSSSFADSNPIRPVTDRA...SYPVVAA', length=384
+ ID and Name='CATH_HUMAN',
+ Seq='------MWATLPLLCAGAWLLGV--------PVCGAAELS...SYPIPLV', length=384
+Testing reading phylip format file Phylip/interlaced.phy as an alignment
+ -M- alignment column 0
+ -A- alignment column 1
+ -H- alignment column 2
+ -A- alignment column 3
+ -R- alignment column 4
+ ||| ...
+ -AV alignment column 383
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading phylip format file Phylip/interlaced2.phy
+ ID and Name='IXI_234',
+ Seq='TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCC...AGDRSHE', length=131
+ ID and Name='IXI_235',
+ Seq='TSPASIRPPAGPSSR---------RPSPPGPRRPTGRPCC...AGDRSHE', length=131
+ ID and Name='IXI_236',
+ Seq='TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRPPGRPCC...AGDRSHE', length=131
+ ID and Name='IXI_237',
+ Seq='TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRPT----C...AGDRSHE', length=131
+Testing reading phylip format file Phylip/interlaced2.phy as an alignment
+ TTTT alignment column 0
+ SSSS alignment column 1
+ PPPP alignment column 2
+ AAAA alignment column 3
+ SSSS alignment column 4
+ |||| ...
+ EEEE alignment column 130
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Finished tested reading files
+
+Starting testing writing records
+(Note that some of these are expected to 'fail' and say why)
+
+Testing can write/read zero records
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Failed: Must have at least one sequence
+ Checking can write/read as 'phylip' format
+ Failed: Must have at least one sequence
+ Checking can write/read as 'stockholm' format
+ Failed: Must have at least one sequence
+Testing can write/read three peptides of different lengths
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'phylip' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'stockholm' format
+ Failed: Sequences must all be the same length
+Testing can write/read three proteins alignment
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing can write/read three DNA sequence alignment
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing can write/read 3 DNA seq alignment with CR/LF in name/descr
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing can write/read alignment with repeated record
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Failed: Repeated identifier, possibly due to truncation
+ Checking can write/read as 'stockholm' format
+ Failed: Duplicate record identifier: Beta
+Finished tested writing files

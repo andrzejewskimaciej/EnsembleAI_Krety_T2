@@ -1,0 +1,63 @@
+<div class="alert alert-info hardware-scan-status">
+  <% if (!_.isEmpty(in_progress_scan)) { %>
+  Hardware scan in progress:
+  <a href="/recipes/<%- encodeURIComponent(in_progress_scan['recipe_id']) %>">R:<%- in_progress_scan['recipe_id'] %></a>
+  (<em><%- in_progress_scan['status'] %></em>).
+<% } else { %>
+<% if (hardware_scan_date) { %>
+  Hardware scan was last run
+  <time datetime="<%- moment.utc(hardware_scan_date).toISOString() %>"
+        title="<%- moment.utc(hardware_scan_date).local().format('YYYY-MM-DD HH:mm:ss Z') %>">
+    <%- moment.utc(hardware_scan_date).fromNow() %></time>.
+<% } else { %>
+   Hardware scan has never been run.
+<% } %>
+<% } %>
+<% if (can_change_hardware) { %>
+<button type="button" class="btn scan btn-info"
+        <% if (!_.isEmpty(in_progress_scan)) { %>disabled="disabled"<% } %>
+        data-loading-text="<i class='fa fa-refresh fa-spin'></i> Submitting job&hellip;">
+  <i class="fa fa-refresh"></i> Scan
+</button>
+<% } %>
+</div>
+<section>
+<h3>
+  System
+  <% if (can_change_hardware) { %>
+  <button type="button" class="btn edit"><i class="fa fa-pencil-square-o"></i> Edit</button>
+  <% } %>
+</h3>
+<table class="table table-vertical">
+  <tbody>
+    <tr>
+      <th>Host Hypervisor</th>
+      <td><%- hypervisor || '(not virtualized)' %></td>
+    </tr>
+    <tr>
+      <th>Vendor</th>
+      <td><%- vendor %></td>
+    </tr>
+    <tr>
+      <th>Model</th>
+      <td><%- model %></td>
+    </tr>
+    <tr>
+      <th>Serial Number</th>
+      <td><%- serial_number %></td>
+    </tr>
+    <tr>
+      <th>MAC Address</th>
+      <td><%- mac_address %></td>
+    </tr>
+    <tr>
+      <th>Memory</th>
+      <td><% if (memory) { %><%- memory %> MB<% } %></td>
+    </tr>
+    <tr>
+      <th>NUMA Nodes</th>
+      <td><%- numa_nodes %></td>
+    </tr>
+  </tbody>
+</table>
+</section>

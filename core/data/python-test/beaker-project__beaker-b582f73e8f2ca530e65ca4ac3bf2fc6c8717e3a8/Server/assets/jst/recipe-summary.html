@@ -1,0 +1,55 @@
+<p>
+  <% if (start_time) { %>
+  Started
+  <time datetime="<%- start_time.toISOString() %>"
+        title="<%- start_time.local().format('YYYY-MM-DD HH:mm:ss Z') %>">
+    <%- start_time.fromNow() %></time><% if (is_finished) { %> and
+        finished in
+        <time datetime="<%- finish_time.toISOString() %>"
+              title="<%- finish_time.local().format('YYYY-MM-DD HH:mm:ss Z') %>">
+        <%- moment.duration(finish_time.diff(start_time)).format("HH:mm:ss", {trim: false}) %></time><% } %>.
+  <% } else { %>
+      <%
+        // If a recipe is aborted or cancelled and was never started,
+        // we use the started time of the last task result as the time
+        // that the recipe was aborted or cancelled.
+      %>
+      <% if (is_finished) { %>
+          <%- status %>
+          <time datetime="<%- moment.utc(last_result_started).toISOString() %>"
+                title="<%- moment.utc(last_result_started).local().format('YYYY-MM-DD HH:mm:ss Z') %>">
+            <%- moment.utc(last_result_started).fromNow() %></time>
+          without starting.
+      <% } else if (recipeset.get('queue_time')) { %>
+      Queued
+      <time datetime="<%- recipeset.get('queue_time').toISOString() %>"
+            title="<%- recipeset.get('queue_time').local().format('YYYY-MM-DD HH:mm:ss Z') %>">
+      <%- recipeset.get('queue_time').fromNow() %></time>.<% } %>
+  <% } %>
+</p>
+<p>
+  <% if (typeof hostrecipe != 'undefined' && hostrecipe) { %>
+    Guest recipe hosted by <%= hostrecipe.toHTML() %>.
+    <br/>
+  <% } %>
+  Using <%= distro_tree.toHTML() %><%
+  if (!_.isEmpty(resource)) { %>
+      <br/>on <%
+      if (!_.isEmpty(resource.get('system'))) {
+          %><%= resource.get('system').toHTML() %><%
+      } else { %>
+          <%- resource.get('fqdn') %>
+          <% if (!_.isEmpty(resource.get('instance_id'))) { %>
+              <br/>(OpenStack instance <a href="<%- resource.get('href') %>"><%- resource.get('instance_id') %></a>)<%
+          } %><%
+      } %><%
+  } %><%
+  if (status == 'Queued' && !_.isEmpty(possible_systems)) { %>
+      <br/>on
+      <a href="<%- beaker_url_prefix %>recipes/systems?recipe_id=<%- id %>">
+      <%- _.size(possible_systems) %> possible
+      <%- _.size(possible_systems) > 1 ? 'systems' : 'system' %></a><%
+  } %><% if (!_.isEmpty(role) && role != 'None' && role != 'STANDALONE' && role != 'RECIPE_MEMBERS') { %>
+      <br/>with role <%- role %><%
+  } %>.
+</p>

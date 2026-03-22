@@ -1,0 +1,136 @@
+**Biopython README file**
+ 
+	"The Biopython Project":http://www.biopython.org/ is an international
+association of developers of freely available Python tools for
+computational molecular biology.
+
+biopython.org provides an online resource for modules, scripts, and
+web links for developers of Python-based software for life science
+research.  Thanks to bioperl, we can also provide web, FTP and CVS
+space for individuals and organizations wishing to distribute or
+otherwise make available standalone scripts & code.
+
+This Biopython package is made available under generous terms.  Please
+see the LICENSE file for further details.
+
+
+**For the impatient**
+
+To build and install Biopython, type:
+python setup.py build
+python setup.py test
+python setup.py install
+
+
+
+
+**System Requirements**
+
+
+o "Python 2.0":http://www.python.org/ or above
+
+o "mxTextTools":http://starship.python.net/~lemburg/mxTextTools.html
+
+o "Numerical Python 15.3 or above":http://numpy.sourceforge.net/ (optional)
+This is only required if you want to use the classification tools.
+
+o "Martel":http://www.biopython.org/~dalke/Martel/
+  (now included in Biopython by default, so don't worry about adding this)
+
+
+**Installation**
+
+*** Make sure Python and Distutils are installed correctly ***
+
+Installation should be as simple as going to the biopython directory,
+and typing:
+
+	'python setup.py install'
+
+
+If you need to do additional configuration, e.g. changing the base
+directory, please type 'python setup.py', or see the documentation for
+Distutils.
+
+
+
+
+For FreeBSD users, "Johann Visagie", mailto:wjv@cityip.co.za has made
+Biopython available in the ports tree.  According to Johann:
+
+  This means that a FreeBSD user with an up-to-date ports tree can now
+  install BioPython as simply as:
+
+  'cd /usr/ports/biology/py-biopython ; make install'
+
+  Fetching of the package as well as installation of all dependencies
+  (Python itself as well as Distutils) will be handled automagically.
+
+
+**Testing**
+
+Biopython includes a suite of regression tests to check if
+everything's running correctly.  To do the tests, type:
+drevil:~biopython/> python setup.py test
+
+If you have Tk installed, this will run a nice GUI that displays the
+results of the tests.  Otherwise, you will see results on the command
+line.
+
+
+
+**Contributing, Bug Reports**
+
+
+Biopython is run by volunteers from all over the world, with many
+types of backgrounds. We are always looking for people interested in
+helping with code development, web-site management, technical
+administration, and whatever else comes up.
+
+If you wish to contribute, please visit the "web site":http://www.biopython.org
+and join our "mailing list":http://www.biopython.org/MailList.shtml
+
+If you wish to contribute a bug report, please submit them to the
+"online bug reporting form":http://www.biopython.org/biopython-bugs/
+
+
+
+**Distribution Structure**
+
+AUTHORS --      An (incomplete) list of people who have contributed.
+
+Bio/ --         The python package that makes up biopython
+
+Doc/ --         Documentation
+
+LICENSE --      License information for this package
+
+MANIFEST.in --  Tells distutils what files to distribute
+
+NEWS --         Release notes and news
+
+README --       This file
+
+Scripts/ --     Miscellaneous, possibly useful, standalone scripts
+
+Tests/ --       Regression testing code
+
+setup.py --     Installation file.
+
+
+
+**To Do**
+
+
+(In no particular order...)
+
+- PDB parser
+
+- more regression tests
+
+- microarray data
+
+If you see something here you would like to work on, please send mail
+to biopython@biopython.org!
+
+Thanks

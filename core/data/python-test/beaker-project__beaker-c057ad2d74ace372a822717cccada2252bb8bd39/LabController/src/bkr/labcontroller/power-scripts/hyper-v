@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+
+set -e
+
+# Search for guest UUID
+uuid=`wsman enumerate http://schemas.microsoft.com/wbem/wsman/1/wmi/root/virtualization/* --username $power_user -p $power_pass -h $power_address --port 5985 -y basic --filter "select * from Msvm_ComputerSystem where Description = \"Microsoft Virtual Machine\" and ElementName = \"$power_id\"" -D http://schemas.microsoft.com/wbem/wsman/1/WQL --port 5985 | grep \<p:Name\> | sed 's/^[^>]*>\([^<]*\).*$/\1/'`
+
+# Execute given power action
+if [[ $power_mode == "on" ]]; then
+    wsman invoke -a RequestStateChange -k RequestedState=2 "http://schemas.microsoft.com/wbem/wsman/1/wmi/root/virtualization/Msvm_ComputerSystem?Name=$uuid,CreationClassName=Msvm_ComputerSystem" --username $power_user -p $power_pass -y basic -h $power_address --port 5985 > /dev/null
+elif [[ $power_mode == "off" ]]; then
+    wsman invoke -a RequestStateChange -k RequestedState=3 "http://schemas.microsoft.com/wbem/wsman/1/wmi/root/virtualization/Msvm_ComputerSystem?Name=$uuid,CreationClassName=Msvm_ComputerSystem" --username $power_user -p $power_pass -y basic -h $power_address --port 5985 > /dev/null
+else
+    echo 'Invalid power operation' >&2; exit 1
+fi
+
+sleep 5

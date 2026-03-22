@@ -1,0 +1,9 @@
+*.pyc
+*.swp
+*.tmp
+dist
+rpm-build
+*.egg-info
+*.bz2
+Server/build
+Server/devdata.sqlite

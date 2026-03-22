@@ -1,0 +1,2 @@
+# System timezone
+timezone {% if hwclock_is_utc is defined %}--utc {% endif%}{{ timezone|default('America/New_York') }}

@@ -1,0 +1,3 @@
+sphinx_celery>=1.1
+librabbitmq
+-r extras/mongodb.txt

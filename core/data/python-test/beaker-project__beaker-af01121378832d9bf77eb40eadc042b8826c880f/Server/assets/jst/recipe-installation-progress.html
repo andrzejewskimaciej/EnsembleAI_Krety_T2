@@ -1,0 +1,68 @@
+<table class="table">
+    <% if (netboot_configured) { %>
+        <tr>
+            <td>
+                <time datetime="<%- netboot_configured.toISOString() %>"
+                      title="<%- netboot_configured.local().format('YYYY-MM-DD HH:mm:ss Z') %>">
+                     <%= get_time_difference(netboot_configured, start_time) %>
+                </time>
+             </td>
+             <td>
+                 Netboot configured
+                 <div class="recipe-installation-kernel-options"><code><%- kernel_options %></code></div>
+             </td>
+         </tr>
+    <% } %>
+    <% if (rebooted) { %>
+        <tr>
+            <td>
+                 <time datetime="<%- rebooted.toISOString() %>"
+                       title="<%- rebooted.local().format('YYYY-MM-DD HH:mm:ss Z') %>">
+                     <%= get_time_difference(rebooted, start_time) %>
+                 </time>
+            </td>
+            <td>
+                System rebooted
+            </td>
+        </tr>
+    <% } %>
+    <% if (install_started) { %>
+        <tr>
+            <td>
+                <time datetime="<%- install_started.toISOString() %>"
+                      title="<%- install_started.local().format('YYYY-MM-DD HH:mm:ss Z') %>">
+                     <%= get_time_difference(install_started, start_time) %>
+                </time>
+            </td>
+            <td>
+                Installation started
+            </td>
+        </tr>
+    <% } %>
+    <% if (install_finished) { %>
+        <tr>
+            <td>
+                <time datetime="<%- install_finished.toISOString() %>"
+                      title="<%- install_finished.local().format('YYYY-MM-DD HH:mm:ss Z') %>">
+                     <%= get_time_difference(install_finished, start_time) %>
+                </time>
+            </td>
+            <td>
+                Installation completed
+            </td>
+        </tr>
+    <% } %>
+    <% if (postinstall_finished) { %>
+        <tr>
+            <td>
+                <time datetime="<%- postinstall_finished.toISOString() %>"
+                      title="<%- postinstall_finished.local().format('YYYY-MM-DD HH:mm:ss Z') %>">
+                     <%= get_time_difference(postinstall_finished, start_time) %>
+                </time>
+            </td>
+            <td>
+                Post-install tasks completed
+            </td>
+        </tr>
+    <% } %>
+</table>

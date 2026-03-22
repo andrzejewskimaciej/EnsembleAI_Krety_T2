@@ -1,0 +1,12 @@
+set -x
+{% snippet 'fetch_wrapper' %}
+
+{% if recipe %}
+# Check in with Beaker Server
+fetch - http://{{ lab_controller.fqdn }}:8000/install_start/{{ recipe.id }}
+{% endif %}
+
+{#
+## Enable installation monitoring
+#}
+{% snippet 'pre_anamon' %}

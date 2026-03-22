@@ -1,0 +1,20 @@
+{% if recipe %}
+{% set anamon_url = anamon|default('http://' + lab_controller.fqdn + '/beaker/anamon') %}
+
+fetch /usr/local/sbin/anamon {{ anamon_url|shell_quoted }}
+fetch /etc/rc.d/init.d/anamon {{ (anamon_url + '.init')|shell_quoted }}
+
+chmod 755 /etc/rc.d/init.d/anamon /usr/local/sbin/anamon
+if selinuxenabled &>/dev/null ; then
+    restorecon /etc/rc.d/init.d/anamon /usr/local/sbin/anamon
+fi
+
+chkconfig --add anamon
+
+cat << __EOT__ > /etc/sysconfig/anamon
+XMLRPC_URL="http://{{ lab_controller.fqdn }}:8000/RPC2"
+RECIPE_ID="{{ recipe.id }}"
+LOGFILES="/var/log/boot.log /var/log/messages /var/log/dmesg"
+__EOT__
+
+{% endif %}

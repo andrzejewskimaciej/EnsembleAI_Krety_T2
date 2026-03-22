@@ -1,0 +1,28 @@
+..
+   Copyright 2009-2011 Ram Rachum. This work is licensed under a Creative
+   Commons Attribution-Share Alike 2.5 Israel License, which may be obtained at
+   http://creativecommons.org/licenses/by-sa/2.5/il/
+
+.. _index:
+
+=======================
+garlicsim documentation
+=======================
+
+Contents:
+
+.. toctree::
+   :maxdepth: 2
+   
+   intro/index
+   topics/index
+   ref/index
+   misc/index
+
+More documentation coming soon! If you have any questions or feedback, say hello
+on the `mailing list`_!
+
+.. _mailing list: mailto:garlicsim@librelist.org
+
+.. * :ref:`genindex`
+.. * :ref:`modindex`

@@ -1,0 +1,306 @@
+
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+
+// These are all the LESS files making up Bootstrap, in the order they are 
+// defined in boostrap.less and responsive.less. Unneeded bits are commented out 
+// as an optimisation.
+@import "bootstrap/less/variables.less";
+@import "bootstrap/less/mixins.less";
+// CSS Reset
+@import "bootstrap/less/reset.less";
+// Grid system and page structure
+@import "bootstrap/less/scaffolding.less";
+@import "bootstrap/less/grid.less";
+@import "bootstrap/less/layouts.less";
+// Base CSS
+@import "bootstrap/less/type.less";
+@import "bootstrap/less/code.less";
+@import "bootstrap/less/forms.less";
+@import "bootstrap/less/tables.less";
+// Components: common
+//@import "bootstrap/less/sprites.less";
+@import "bootstrap/less/dropdowns.less";
+@import "bootstrap/less/wells.less";
+@import "bootstrap/less/component-animations.less";
+@import "bootstrap/less/close.less";
+// Components: Buttons & Alerts
+@import "bootstrap/less/buttons.less";
+@import "bootstrap/less/button-groups.less";
+@import "bootstrap/less/alerts.less"; // Note: alerts share common CSS with buttons and thus have styles in buttons.less
+// Components: Nav
+@import "bootstrap/less/navs.less";
+@import "bootstrap/less/navbar.less";
+//@import "bootstrap/less/breadcrumbs.less";
+@import "bootstrap/less/pagination.less";
+//@import "bootstrap/less/pager.less";
+// Components: Popovers
+@import "bootstrap/less/modals.less";
+//@import "bootstrap/less/tooltip.less";
+//@import "bootstrap/less/popovers.less";
+// Components: Misc
+//@import "bootstrap/less/thumbnails.less";
+@import "bootstrap/less/media.less";
+@import "bootstrap/less/labels-badges.less";
+@import "bootstrap/less/progress-bars.less";
+//@import "bootstrap/less/accordion.less";
+//@import "bootstrap/less/carousel.less";
+//@import "bootstrap/less/hero-unit.less";
+// Utility classes
+@import "bootstrap/less/utilities.less"; // Has to be last to override when necessary
+// Responsive classes
+@import "bootstrap/less/responsive-utilities.less";
+// Media queries
+@import "bootstrap/less/responsive-1200px-min.less";
+@import "bootstrap/less/responsive-768px-979px.less";
+@import "bootstrap/less/responsive-767px-max.less";
+// Responsive navbar
+@import "bootstrap/less/responsive-navbar.less";
+
+@import "font-awesome/less/font-awesome.less";
+@import "typeahead.js-bootstrap.less";
+@import "bootstrap-datepicker/less/datepicker.less";
+@import (less) "bootstrap-select/bootstrap-select.css";
+@import "datatables-bootstrap.less";
+@import "backgrid.less";
+
+// overrides for Bootstrap variables
+@sansFontFamily:  "Liberation Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+@serifFontFamily: Georgia, "Times New Roman", Times, serif;
+@monoFontFamily:  "Source Code Pro", "DejaVu Sans Mono", Monaco, Menlo, Consolas, "Courier New", monospace;
+// Bootstrap sets a global font size of 14px and line height of 20px, which is 
+// not very nice. It would be better to use 1em as the base font-size and use 
+// relative units for line height, so that we obey the font sizes configured in 
+// the browser. Unfortunately this won't work because Bootstrap assumes throughout 
+// that @baseLineHeight is an absolute size, not using relative units. :-(
+//@baseFontSize:          1em;
+//@baseLineHeight:        3ex;
+
+// overrides for FontAwesome variables
+@fa-font-path: "font-awesome/fonts";
+
+// workaround for https://github.com/twitter/typeahead.js/issues/147
+.modal-body {
+    overflow: visible;
+}
+
+// workaround for missing margin above help-block with bootstrap-select
+.form-horizontal .bootstrap-select + .help-block {
+    margin-top: @baseLineHeight / 2;
+}
+
+// heading sizes (Bootstrap's are too generous)
+h1, h2, h3 { line-height: @baseLineHeight * 2; }
+h1 { font-size: @baseFontSize * 2.25; }
+h2 { font-size: @baseFontSize * 1.75; }
+h3 { font-size: @baseFontSize * 1.5; }
+h4 { font-size: @baseFontSize * 1.25; }
+h5 { font-size: @baseFontSize; }
+h6 { font-size: @baseFontSize; }
+h1 small { font-size: @baseFontSize * 1.5; }
+h2 small { font-size: @baseFontSize * 1.25; }
+h3 small { font-size: @baseFontSize * 1.25; }
+
+// Friendly datetimes with the real timestamp in title.
+time[title] {
+    border-bottom: 1px dashed currentColor;
+}
+
+// We have some forms in table cells, and the bottom margin (from Bootstrap) 
+// ruins the row height.
+td form, td input, td select, td .input-append, td .input-prepend {
+    margin-bottom: 0 !important;
+}
+// Same for forms in modals.
+.modal form {
+    margin-bottom: 0 !important;
+}
+
+// By default, table cells are top-aligned. If every cell in a row has only one 
+// (notional) line, it makes more sense to middle-align them.
+.table-one-line-per-row td {
+    vertical-align: middle;
+}
+
+// To put stuff inline beside the pagination doodads
+// Use <div class="pagination-beside"><span>Extra stuff</span></div>
+.pagination-beside {
+    display: inline-block;
+    span {
+        // matches .pagination ul li a
+        float: left;
+        padding: 4px 12px;
+    }
+}
+
+// Use <span class="form-control-static"> instead of an <input/>, if you just 
+// have a static value.
+// This is in Bootstrap 3.
+.form-control-static {
+    display: inline-block;
+    padding-top: 5px; // corresponds to .control-label
+}
+
+// Justified button groups. Add to a .btn-group to make it fill 100% width, with 
+// equal button widths. Only works with <a class="btn"/>.
+// Taken from Bootstrap 3, plus some border fixes.
+.btn-group-justified {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: separate;
+    & > .btn, & > .btn-group {
+        float: none;
+        display: table-cell;
+        width: 1%;
+    }
+    & > .btn-group .btn {
+        width: 100%;
+    }
+    & > .btn, & > .btn-group > .btn {
+        border-right-width: 0;
+        &:last-child {
+            border-right-width: 1px;
+        }
+    }
+}
+
+// Text inside btn-toolbars
+// Use <span class="btn-group btn-group-text">Some text</span>
+.btn-group-text {
+    font-size: @baseFontSize;
+}
+
+// buttons in grid cells
+.table .btn {
+    white-space: nowrap;
+    padding: @paddingSmall;
+}
+
+// progress bars in grid cells
+.table td .progress {
+    min-width: 100px;
+    height: 12px;
+    margin-bottom: 0;
+}
+
+// "default" segment for progress bars (the actual default is blue, this is 
+// "default" as in grey to match the default label colour)
+.progress-default .bar, .progress .bar-default {
+  #gradient > .vertical(lighten(@gray, 15%), @gray);
+}
+
+// dirty rows in editable tables
+.table > tbody > tr.dirty {
+    & > td, & > th {
+        background-color: @warningBackground;
+        font-style: italic;
+    }
+}
+
+// Thicker bottom border for th (this is in Bootstrap 3)
+.table thead th {
+    border-bottom: 2px solid @tableBorder;
+}
+
+// "Vertical" tables have one <th/> at the start of each <tr/>, running 
+// vertically down the first column.
+.table-vertical {
+    width: auto;
+    border-collapse: separate;
+    border-spacing: 0 0.75em;
+    td, th {
+        padding: 0.25em 1em;
+        // override default row borders from .table
+        border-top: none;
+    }
+    th {
+        font-weight: normal;
+        color: @gray;
+        padding-left: 0;
+    }
+    td {
+        border-left: 1px solid @tableBorder;
+    }
+}
+
+@resultPassColor: @green;
+@resultFailColor: @red;
+@resultWarnColor: @orange;
+@resultNewColor: @blue;
+@resultPanicColor: @black;
+
+// XXX The above colours are used in the job matrix and are carried over
+// from our pre Bootstrap styling.
+// We  should probably resolve the above colours with the below at some
+// point.
+
+// colour-coded status and result in jobs/recipes grid
+.statusCompleted, .resultPass { color: @green; }
+.statusAborted, .resultFail { color: @red; }
+.statusCancelled, .resultWarn { color: @orange; }
+.statusRunning { color: @blueDark; }
+.statusDirty { font-style: italic; }
+
+// typeaheads
+.tt-dropdown-menu {
+    min-width: 240px;
+}
+.tt-suggestion small {
+    .muted;
+    margin-left: 0.5em;
+}
+input.tt-hint {
+    .muted;
+}
+// https://github.com/twitter/typeahead.js/issues/88
+.input-append .tt-suggestion, .input-prepend .tt-suggestion {
+    font-size: @baseFontSize;
+}
+
+.input-append .twitter-typeahead, .input-prepend .twitter-typeahead {
+    font-size: @baseFontSize;
+}
+
+// "Growl-like" notifications
+.alert.bootstrap-growl {
+    box-shadow: 0px 2px 14px rgba(50, 50, 50, 0.5);
+}
+
+// simulate Bootstrap 3 list group
+.list-group {
+    margin-left: 0px;
+    margin-bottom: 20px;
+    li {
+        position: relative;
+        display: block;
+        padding: 10px 15px;
+        // Place the border on the list items and negative margin up for better styling
+        margin-bottom: -1px;
+        background-color: @white;
+        border: 1px solid #ddd;
+    }
+}
+
+.list-group-mixin {
+    max-width: 35em;
+    .btn {
+        float: right;
+        margin-top: -5px;
+    }
+}
+
+@import "master.less";
+@import "system.less";
+@import "system-pool.less";
+@import "job.less";
+@import "recipe-tasks.less";
+@import "job-matrix.less";
+@import "query-builder.less";
+
+// Site-specific styles. The beaker-server package creates site.less as 
+// a symlink to /dev/null if it doesn't exist. Admins can overwrite the symlink 
+// to point at their own custom LESS instead.
+@import "site.less";

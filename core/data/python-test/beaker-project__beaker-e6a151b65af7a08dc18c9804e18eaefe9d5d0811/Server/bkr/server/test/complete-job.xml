@@ -1,0 +1,57 @@
+<job product="the_product" retention_tag="audit">
+    <notify>
+        <cc>
+            dan@example.com
+        </cc>
+        <cc>
+            ray@example.com
+        </cc>
+    </notify>
+    <whiteboard>
+        valid job
+    </whiteboard>
+    <recipeSet>
+        <recipe kernel_options="" kernel_options_post="" ks_meta="" role="None" whiteboard="">
+            <guestrecipe guestargs="" guestname="" kernel_options="" kernel_options_post="" ks_meta="" role="None" whiteboard="">
+                <autopick random="true"/>
+                <watchdog panic="None"/>
+                <packages/>
+                <ks_appends>
+                    <ks_append>
+<![CDATA[]]>                    </ks_append>
+                </ks_appends>
+                <repos/>
+                <distroRequires>
+                    <distro_name op="=" value="BlueShoeLinux5-5"/>
+                    <distro_virt op="=" value=""/>
+                </distroRequires>
+                <hostRequires>
+                    <system_type value="Machine"/>
+                </hostRequires>
+                <partitions/>
+                <task name="/distribution/install" role="STANDALONE">
+                    <params/>
+                </task>
+            </guestrecipe>
+            <autopick random="true"/>
+            <watchdog panic="None"/>
+            <packages/>
+            <ks_appends>
+                <ks_append>
+<![CDATA[]]>                </ks_append>
+            </ks_appends>
+            <repos/>
+            <distroRequires>
+                <distro_name op="=" value="BlueShoeLinux5-5"/>
+                <distro_virt op="=" value=""/>
+            </distroRequires>
+            <hostRequires>
+                <system_type value="Machine"/>
+            </hostRequires>
+            <partitions/>
+            <task name="/distribution/install" role="STANDALONE">
+                <params/>
+            </task>
+        </recipe>
+    </recipeSet>
+</job>
