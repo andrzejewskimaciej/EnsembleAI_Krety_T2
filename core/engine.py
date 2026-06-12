@@ -22,7 +22,7 @@ argparser.add_argument("--limit", type=int, default=None)
 
 try:
     args = argparser.parse_args()
-except Exception:
+except (Exception, SystemExit):
     args = argparse.Namespace(stage='start', lang='python', strategy='regex-definition', trim_prefix=True, trim_suffix=True, limit=None)
 
 def build_repo_cache(repo_path: str) -> dict:
